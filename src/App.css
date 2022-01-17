@@ -36,3 +36,42 @@
     transform: rotate(360deg);
   }
 } */
+
+.App {
+  display: flex;
+}
+
+.Sidemenu {
+  background-color: blue;
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column wrap; */
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+}
+
+#sidebtn {
+  background-color: coral;
+  height: 40px;
+  min-width: 150px;
+}
+
+.ImageArea {
+  background-color: gold;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.ImageArea IMG {
+  background-color: magenta;
+}
+
+.DragElementsArea {
+  background-color: lawngreen;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 15px;
+}
