@@ -55,6 +55,8 @@
   background-color: coral;
   height: 40px;
   min-width: 150px;
+  display: flex;
+  align-items: center;
 }
 
 .ImageArea {
@@ -74,4 +76,15 @@
   flex-direction: row;
   gap: 15px;
   padding: 15px;
+}
+
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  background-color: coral;
+  height: 40px;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
 }
