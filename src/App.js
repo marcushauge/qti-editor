@@ -33,6 +33,10 @@ function App() {
 
       </div>
 
+      <div className="CroppedArea">
+        <p>Hei</p>
+      </div>
+
 
     </div>
   );

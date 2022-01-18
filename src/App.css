@@ -68,6 +68,8 @@
 }
 .ImageArea IMG {
   background-color: magenta;
+  max-width: 100%;
+  height: auto;
 }
 
 .DragElementsArea {
@@ -87,4 +89,9 @@ input[type="file"] {
   min-width: 150px;
   display: flex;
   align-items: center;
+}
+
+.CroppedArea {
+  display: flex;
+  background-color: crimson;
 }
