@@ -12,6 +12,7 @@ function App() {
   const [bgImg, setBgImg] = useState()
   const [createDragElementPressed, setCreateDragElementPressed] = useState(false)
   const [mouseCoordinates, setMouseCoordinates] = useState([]) //xy start and xy stop
+  const [previewCanvasSize, setPreviewCanvasSize] = useState([0, 0])
 
   const canvasRef = useRef(null)
 
@@ -25,12 +26,13 @@ function App() {
   }
 
   function drawCrop(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-    console.log(bgImg)
+    setPreviewCanvasSize([dWidth, dHeight])
     let ctx = canvasRef.current.getContext("2d")
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     let imgSource = new Image()
+    console.log("Drawing preview snippet with dimensions:")
+    console.log(dWidth + " * "  + dHeight)
     imgSource.onload = () => {
-      console.log("loaded")
       ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
     }
     imgSource.src = bgImg
@@ -63,8 +65,8 @@ function App() {
       </div>
 
       <div className="CropArea">
-        <p>Cropping</p>
-        <canvas ref={canvasRef} id="demo" width="300" height="300"></canvas>
+        <h3>Preview snippet</h3>
+        <canvas ref={canvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
       </div>
 
 

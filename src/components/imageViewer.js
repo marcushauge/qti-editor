@@ -49,7 +49,7 @@ function ImageViewer(props) {
                 if(props.createDragElementPressed) {
                     stopMouseX = getMousePos(event).x
                     stopMouseY = getMousePos(event).y
-                    console.log(startMouseX + " and " + startMouseY)
+                    console.log(stopMouseX + " and " + stopMouseY)
 
                     //slice it to crop?
                     props.slice(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
