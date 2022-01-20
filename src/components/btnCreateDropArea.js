@@ -1,7 +1,7 @@
 
 function CreateDropArea(props) {
     return (
-        <button id={props.id}>Create drop area</button>
+        <button className="sidebtn">Create drop area</button>
     )
 }
 

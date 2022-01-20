@@ -1,7 +1,7 @@
 
 function CreateDistractor(props) {
     return (
-        <button id={props.id} >Create distractor</button>
+        <button className="sidebtn" >Create distractor</button>
     )
 }
 
