@@ -36,8 +36,8 @@ function ImageViewer(props) {
     
     return (
         //<img src={props.bgImg} alt="Image" width="600" height="600"></img>
-        <div>
-            <canvas ref={canvasRef} width="600" height="600" 
+        <div className="bgCanvasDiv">
+            <canvas ref={canvasRef} width="1200" height="1200" 
             onMouseDown={(event) => {
                 if(props.createDragElementPressed) {
                     startMouseX = getMousePos(event).x

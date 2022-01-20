@@ -72,6 +72,12 @@
   height: auto;
 }
 
+.bgCanvasDiv {
+  max-width: 600px;
+  max-height: 600px;
+  overflow: scroll;
+}
+
 .DragElementsArea {
   background-color: lawngreen;
   display: flex;
