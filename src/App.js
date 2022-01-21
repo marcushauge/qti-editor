@@ -6,6 +6,8 @@ import CreateDropArea from './components/btnCreateDropArea';
 import CreateDistractor from "./components/btnCreateDistractor";
 import ImageViewer from './components/imageViewer';
 import React, { useRef, useState } from 'react';
+import DragElementsArea from './components/dragElementsArea';
+import DragElement from './components/dragElement';
 
 function App() {
 
@@ -13,6 +15,7 @@ function App() {
   const [createDragElementPressed, setCreateDragElementPressed] = useState(false)
   const [mouseCoordinates, setMouseCoordinates] = useState([]) //xy start and xy stop
   const [previewCanvasSize, setPreviewCanvasSize] = useState([0, 0])
+  const [dragElements, setDragElements] = useState([])
 
   const canvasRef = useRef(null)
 
@@ -34,8 +37,16 @@ function App() {
     console.log(dWidth + " * "  + dHeight)
     imgSource.onload = () => {
       ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+      
+        let newDragElement = {
+          src: canvasRef.current.toDataURL(),
+          width: dWidth,
+          height: dHeight
+        }
+      setDragElements(dragElements => [...dragElements, newDragElement])
     }
     imgSource.src = bgImg
+    
   }
 
   return (
@@ -57,10 +68,7 @@ function App() {
         >
         </ImageViewer>
 
-        <div className="DragElementsArea">
-          <button>Element1</button>
-          <button>Element2</button>
-        </div>
+        <DragElementsArea dragElements={dragElements}></DragElementsArea>
 
       </div>
 
