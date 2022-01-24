@@ -14,8 +14,9 @@ function App() {
   const [bgImg, setBgImg] = useState()
   const [createDragElementPressed, setCreateDragElementPressed] = useState(false)
   const [mouseCoordinates, setMouseCoordinates] = useState([]) //xy start and xy stop
-  const [previewCanvasSize, setPreviewCanvasSize] = useState([0, 0])
+  const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
   const [dragElements, setDragElements] = useState([])
+  const [newDragElement, setNewDragElement] = useState(null)
 
   const canvasRef = useRef(null)
 
@@ -37,17 +38,19 @@ function App() {
     console.log(dWidth + " * "  + dHeight)
     imgSource.onload = () => {
       ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-      
-        let newDragElement = {
-          src: canvasRef.current.toDataURL(),
-          width: dWidth,
-          height: dHeight
-        }
-      setDragElements(dragElements => [...dragElements, newDragElement])
+      let newDragEl = {
+        src: canvasRef.current.toDataURL(),
+        width: dWidth,
+        height: dHeight
+      }
+      setNewDragElement(newDragEl)
+      //setDragElements(dragElements => [...dragElements, newDragEl])
     }
     imgSource.src = bgImg
     
   }
+
+
 
   return (
     <div className="App" style={{cursor: createDragElementPressed? "crosshair" : "default"}}>
@@ -75,6 +78,15 @@ function App() {
       <div className="CropArea">
         <h3>Preview snippet</h3>
         <canvas ref={canvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
+        <button onClick={() => {
+          setDragElements(dragElements => [...dragElements, newDragElement])
+          //Clear preview
+          setPreviewCanvasSize([30, 15])
+          let ctx = canvasRef.current.getContext("2d")
+          ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+          //Un-toggle create drag element button
+          switchCreateDragElement()
+        }}>Create</button>
       </div>
 
 
