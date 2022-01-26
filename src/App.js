@@ -16,7 +16,7 @@ function App() {
   const [mouseCoordinates, setMouseCoordinates] = useState([]) //xy start and xy stop
   const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
   const [dragElements, setDragElements] = useState([])
-  const [newDragElement, setNewDragElement] = useState(null)
+  const [newDragElement, setNewDragElement] = useState()
 
   const canvasRef = useRef(null)
 
@@ -78,9 +78,13 @@ function App() {
       <div className="CropArea">
         <h3>Preview snippet</h3>
         <canvas ref={canvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
-        <button onClick={() => {
+        <button style={{visibility: createDragElementPressed? "visible" : "hidden"}} onClick={() => {
+          if(!newDragElement) {
+            return
+          }
           setDragElements(dragElements => [...dragElements, newDragElement])
-          //Clear preview
+          //Clear preview and new drag element state
+          setNewDragElement(null)
           setPreviewCanvasSize([30, 15])
           let ctx = canvasRef.current.getContext("2d")
           ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
