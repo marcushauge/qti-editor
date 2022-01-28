@@ -59,17 +59,23 @@
   align-items: center;
 }
 
-.ImageArea {
+.MainArea {
   background-color: gold;
   padding: 15px;
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-.ImageArea canvas {
+.MainArea canvas {
   background-color: magenta;
   width: auto;
   height: auto;
+}
+.imageViewer {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  background-color: aqua;
 }
 
 .bgCanvasDiv {
@@ -97,13 +103,13 @@ input[type="file"] {
   align-items: center;
 }
 
-.CropArea {
+.PreviewSnippetArea {
   display: flex;
   flex-direction: column;
   background-color: crimson;
 }
 
-.CropArea canvas {
+.PreviewSnippetArea canvas {
   background-color: darkgray;
   margin: 10px;
   padding: 10px;

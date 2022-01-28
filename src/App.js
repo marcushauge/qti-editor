@@ -29,7 +29,16 @@ function App() {
     setMouseCoordinates(coordinates)
   }
 
-  function drawCrop(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+  function addDragElement(imgSrc, width, height) {
+    let newDragEl = {
+      src: imgSrc,
+      width: width,
+      height: height
+    }
+    setDragElements(dragElements => [...dragElements, newDragEl])
+  }
+
+  function drawPreviewSnippet(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
     setPreviewCanvasSize([dWidth, dHeight])
     let ctx = canvasRef.current.getContext("2d")
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
@@ -44,7 +53,6 @@ function App() {
         height: dHeight
       }
       setNewDragElement(newDragEl)
-      //setDragElements(dragElements => [...dragElements, newDragEl])
     }
     imgSource.src = bgImg
     
@@ -58,24 +66,25 @@ function App() {
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
-        <CreateDragElement click={() => {switchCreateDragElement()}} drawCrop={() => {drawCrop()}} clicked={createDragElementPressed} id="createDragElementBtn"></CreateDragElement>
+        <CreateDragElement click={() => {switchCreateDragElement()}} clicked={createDragElementPressed} id="createDragElementBtn"></CreateDragElement>
         <RemoveArea></RemoveArea>
         <CreateDropArea></CreateDropArea>
         <CreateDistractor></CreateDistractor>
       </div>
 
-      <div className="ImageArea">
+      <div className="MainArea">
         <ImageViewer bgImg={bgImg} createDragElementPressed={createDragElementPressed}
         setMouseCoordinates={setMouseCoordinatesState}
-        slice={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {drawCrop(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
-        >
-        </ImageViewer>
+        slice={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {drawPreviewSnippet(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
+        addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
+        switchCreateDragElement={() => {switchCreateDragElement()}}
+        ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
 
       </div>
 
-      <div className="CropArea">
+      {/* <div className="PreviewSnippetArea">
         <h3>Preview snippet</h3>
         <canvas ref={canvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
         <button style={{visibility: createDragElementPressed? "visible" : "hidden"}} onClick={() => {
@@ -91,7 +100,7 @@ function App() {
           //Un-toggle create drag element button
           switchCreateDragElement()
         }}>Create</button>
-      </div>
+      </div> */}
 
 
     </div>
