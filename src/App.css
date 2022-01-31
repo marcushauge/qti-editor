@@ -114,10 +114,13 @@ input[type="file"] {
   background-color: #ED474A;
   color: #FFFFFF;
   padding: 10px;
+  align-items: center;
 }
 
 .PreviewSnippetArea canvas {
+  border-style:groove;
+  border-color: #ed474a81;
   align-self: center;
-  background-color: darkgray;
+  background-color: #ED474A;
   margin: 10px;
 }
