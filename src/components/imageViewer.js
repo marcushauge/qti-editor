@@ -2,9 +2,7 @@ import { useEffect, useRef, useState } from "react"
 
 function ImageViewer(props) {
     const canvasRef = useRef(null)
-    const fakeCanvasRef = useRef(null)
     const previewCanvasRef = useRef(null)
-    const [fakeCanvasSize, setFakeCanvasSize] = useState([30, 15])
     const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
     const [newDragElement, setNewDragElement] = useState()
 
@@ -35,20 +33,6 @@ function ImageViewer(props) {
           y: event.clientY - rect.top
         };
     }
-
-    function createDragElementFromSnippet(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-        setFakeCanvasSize([dWidth, dHeight])
-        let ctx = fakeCanvasRef.current.getContext("2d")
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        let imgSource = new Image()
-
-        imgSource.onload = () => {
-          ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-          props.addDragElement(fakeCanvasRef.current.toDataURL(), dWidth, dHeight)
-        }
-
-        imgSource.src = props.bgImg
-      }
 
       function createSnippetPreview(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
         setPreviewCanvasSize([dWidth, dHeight])
@@ -85,15 +69,10 @@ function ImageViewer(props) {
                         stopMouseX = getMousePos(event).x
                         stopMouseY = getMousePos(event).y
                         console.log(stopMouseX + " and " + stopMouseY)
-
-                        //slice it to crop?
-                        // props.slice(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
-                        // createDragElementFromSnippet(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                         createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                     }
                 }}>
                 </canvas>
-                <canvas ref={fakeCanvasRef} style={{visibility: "hidden"}} width={fakeCanvasSize[0]} height={fakeCanvasSize[1]}></canvas>
             </div>
             <div className="PreviewSnippetArea">
                 <h3>Preview snippet</h3>
