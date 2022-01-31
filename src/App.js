@@ -34,7 +34,6 @@ function App() {
 
   return (
     <div className="App" style={{cursor: createDragElementPressed? "crosshair" : "default"}}>
-      <p>Hei</p>
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
@@ -52,7 +51,6 @@ function App() {
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
       </div>
-
 
     </div>
   );

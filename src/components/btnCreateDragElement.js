@@ -9,7 +9,7 @@ function CreateDragElement(props) {
 
             //On mouse release
             //props.drawProp()
-        }} style={{filter: props.clicked ? "brightness(80%)" : "brightness(100%)"}}>Create drag element(crop)</button>
+        }} style={{filter: props.clicked ? "brightness(80%)" : "brightness(100%)"}}>Create drag element</button>
     )
 }
 

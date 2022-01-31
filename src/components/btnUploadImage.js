@@ -9,7 +9,7 @@ function UploadImage(props) {
        }
 
     return (
-            <label className="custom-file-upload">
+            <label className="sidebtn">
                 Upload image
                 <input type="file" accept="image/jpeg,image/png,image/webp" onChange={onImageChange}/>
             </label>

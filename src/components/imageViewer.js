@@ -75,7 +75,7 @@ function ImageViewer(props) {
                 </canvas>
             </div>
             <div className="PreviewSnippetArea">
-                <h3>Preview snippet</h3>
+                <h4>Preview snippet</h4>
                 <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
                 <button style={{visibility: props.createDragElementPressed? "visible" : "hidden"}} onClick={() => {
                     if(!newDragElement) {
