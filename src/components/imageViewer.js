@@ -4,7 +4,8 @@ function ImageViewer(props) {
     const canvasRef = useRef(null)
     const previewCanvasRef = useRef(null)
     const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
-    const [newDragElement, setNewDragElement] = useState()
+    const [newDragElement, setNewDragElement] = useState() //Preview element
+    const [newDropArea, setNewDropArea] = useState([0, 0, 0, 0])
 
     var startMouseX = 0
     var startMouseY = 0
@@ -21,6 +22,10 @@ function ImageViewer(props) {
             //var s = Math.min(ctx.canvas.width/img.width, ctx.canvas.height/img.height); //Scale to fit canvas size
             //ctx.scale(s, s);
             ctx.drawImage(img, 0, 0, img.width, img.height);
+            //Then clear the drop areas
+            props.dropAreas.forEach(d => {
+                ctx.clearRect(d.startX, d.startY, d.destinationX, d.destinationY)
+            });
         }
         img.src = props.bgImg
     })
@@ -48,6 +53,7 @@ function ImageViewer(props) {
             height: dHeight
           }
           setNewDragElement(newDragEl)
+          setNewDropArea([sx, sy, sWidth, sHeight])
         }
         imgSource.src = props.bgImg
       }
@@ -81,7 +87,10 @@ function ImageViewer(props) {
                     if(!newDragElement) {
                         return
                     }
+                    //Add it
                     props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
+                    //Add the new drop area
+                    props.addDropArea(newDropArea[0], newDropArea[1], newDropArea[2], newDropArea[3])
                     //Clear preview and new drag element state
                     setNewDragElement(null)
                     setPreviewCanvasSize([30, 15])

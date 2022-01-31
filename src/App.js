@@ -14,6 +14,7 @@ function App() {
   const [bgImg, setBgImg] = useState()
   const [createDragElementPressed, setCreateDragElementPressed] = useState(false)
   const [dragElements, setDragElements] = useState([])
+  const [dropAreas, setDropAreas] = useState([])
 
   const canvasRef = useRef(null)
 
@@ -29,6 +30,17 @@ function App() {
       height: height
     }
     setDragElements(dragElements => [...dragElements, newDragEl])
+  }
+
+  function addDropArea(sx, sy, dx, dy) {
+    let newDropArea = {
+      startX: sx,
+      startY: sy,
+      destinationX: dx,
+      destinationY: dy,
+    }
+    setDropAreas(dropAreas => [...dropAreas, newDropArea])
+    //console.log(dropAreas)
   }
 
 
@@ -47,6 +59,8 @@ function App() {
         <ImageViewer bgImg={bgImg} createDragElementPressed={createDragElementPressed}
         addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
         switchCreateDragElement={() => {switchCreateDragElement()}}
+        dropAreas={dropAreas}
+        addDropArea={(sx, sy, dx, dy) => {addDropArea(sx, sy, dx, dy)}}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
