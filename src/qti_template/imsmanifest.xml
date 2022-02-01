@@ -1,2 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest version="1.1" identifier="MANIFEST" xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:imsmd="http://www.imsglobal.org/xsd/imsmd_v1p2" xmlns:java="http://xml.apache.org/xalan/java"><metadata><imsmd:lom><imsmd:lifecycle><imsmd:status><imsmd:source><imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring></imsmd:source><imsmd:value><imsmd:langstring xml:lang="x-none">Draft</imsmd:langstring></imsmd:value></imsmd:status></imsmd:lifecycle></imsmd:lom></metadata><resources><resource identifier="ID_103871416" type="imsqti_item_xmlv2p2" href="ID_103871416-item.xml"><metadata><imsmd:lom><imsmd:general><imsmd:identifier/><imsmd:title><imsmd:langstring xml:lang="no">Ny oppgave</imsmd:langstring></imsmd:title></imsmd:general><imsmd:classification><imsmd:description><imsmd:langstring>General info, metadata and labels</imsmd:langstring></imsmd:description><imsmd:taxonpath><imsmd:taxon><imsmd:id>contentItemId</imsmd:id><imsmd:entry><imsmd:langstring>103871190</imsmd:langstring></imsmd:entry></imsmd:taxon><imsmd:taxon><imsmd:id>contentRevisionId</imsmd:id><imsmd:entry><imsmd:langstring>103871416</imsmd:langstring></imsmd:entry></imsmd:taxon><imsmd:taxon><imsmd:id>objectType</imsmd:id><imsmd:entry><imsmd:langstring>content_question_qti2_graphicgapmatch_v2</imsmd:langstring></imsmd:entry></imsmd:taxon></imsmd:taxonpath></imsmd:classification></imsmd:lom></metadata><file href="ID_103871416-item.xml"/><file href="resources/graphicgapmatch_default_bg.jpg"/><file href="resources/ID_103871406.png"/></resource></resources></manifest>
+<manifest version="1.1" identifier="MANIFEST" xmlns="http://www.imsglobal.org/xsd/imscp_v1p1" xmlns:imsmd="http://www.imsglobal.org/xsd/imsmd_v1p2" xmlns:java="http://xml.apache.org/xalan/java">
+    <metadata>
+        <imsmd:lom>
+            <imsmd:lifecycle>
+                <imsmd:status>
+                    <imsmd:source>
+                        <imsmd:langstring xml:lang="x-none">LOMv1.0</imsmd:langstring>
+                    </imsmd:source>
+                    <imsmd:value>
+                        <imsmd:langstring xml:lang="x-none">Draft</imsmd:langstring>
+                    </imsmd:value>
+                </imsmd:status>
+            </imsmd:lifecycle>
+        </imsmd:lom>
+    </metadata>
+    <resources>
+        <resource identifier="ID_103871416" type="imsqti_item_xmlv2p2" href="ID_103871416-item.xml">
+            <metadata>
+                <imsmd:lom>
+                    <imsmd:general>
+                        <imsmd:identifier />
+                        <imsmd:title>
+                            <imsmd:langstring xml:lang="no">Ny oppgave</imsmd:langstring>
+                        </imsmd:title>
+                    </imsmd:general>
+                    <imsmd:classification>
+                        <imsmd:description>
+                            <imsmd:langstring>General info, metadata and labels</imsmd:langstring>
+                        </imsmd:description>
+                        <imsmd:taxonpath>
+                            <imsmd:taxon>
+                                <imsmd:id>contentItemId</imsmd:id>
+                                <imsmd:entry>
+                                    <imsmd:langstring>103871190</imsmd:langstring>
+                                </imsmd:entry>
+                            </imsmd:taxon>
+                            <imsmd:taxon>
+                                <imsmd:id>contentRevisionId</imsmd:id>
+                                <imsmd:entry>
+                                    <imsmd:langstring>103871416</imsmd:langstring>
+                                </imsmd:entry>
+                            </imsmd:taxon>
+                            <imsmd:taxon>
+                                <imsmd:id>objectType</imsmd:id>
+                                <imsmd:entry>
+                                    <imsmd:langstring>content_question_qti2_graphicgapmatch_v2</imsmd:langstring>
+                                </imsmd:entry>
+                            </imsmd:taxon>
+                        </imsmd:taxonpath>
+                    </imsmd:classification>
+                </imsmd:lom>
+            </metadata>
+            <file href="ID_103871416-item.xml" />
+            <file href="resources/graphicgapmatch_default_bg.jpg" />
+            <file href="resources/ID_103871406.png" />
+        </resource>
+    </resources>
+</manifest>

@@ -23,26 +23,44 @@ function ExportQTI(props) {
 
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xmlString,"text/xml");
-        console.log(xmlDoc.getRootNode())
 
+        let newGapImg = xmlDoc.createElement("gapImg")
+        let newGapImgObject = xmlDoc.createElement("object")
+        newGapImg.appendChild(newGapImgObject)
+        newGapImg.setAttribute("attr", "HEISANN")
+        xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0].appendChild(newGapImg)
+
+        console.log("------------NEW-------------")
+        console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
     }
 
     function generateQtiManifest() {
 
     }
 
+
     return (
-        <button className="sidebtn" id="exportbtn" onClick={async () => {
-            //Item file
-            let i = await fetch(item)
-            let it = await i.text()
-            generateQtiItem(it)
-            
-            //manifest file
-            let m = await fetch(manifest)
-            let mt = await m.text()
-            generateQtiItem(mt)
-        }}>Export QTI</button>
+        <div>
+            <button className="sidebtn" id="exportbtn" onClick={async () => {
+                //Item file
+                let i = await fetch(item)
+                let it = await i.text()
+                generateQtiItem(it)
+                
+                //manifest file
+                let m = await fetch(manifest)
+                let mt = await m.text()
+                generateQtiManifest(mt)
+            }}>Export QTI</button>
+            <button className="sidebtn" onClick={async () => {
+                let i = await fetch(item)
+                let it = await i.text()
+                let parser = new DOMParser();
+                let xmlDoc = parser.parseFromString(it,"text/xml");
+                console.log("------------ORIGINAL-------------")
+                console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
+            }}>log original qti</button>
+        </div>
     )
 }
 
