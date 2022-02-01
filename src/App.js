@@ -8,6 +8,7 @@ import ImageViewer from './components/imageViewer';
 import React, { useRef, useState } from 'react';
 import DragElementsArea from './components/dragElementsArea';
 import DragElement from './components/dragElement';
+import ExportQTI from './components/btnExportQTI';
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
         <RemoveArea></RemoveArea>
         <CreateDropArea></CreateDropArea>
         <CreateDistractor></CreateDistractor>
+        <ExportQTI></ExportQTI>
       </div>
 
       <div className="MainArea">
