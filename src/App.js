@@ -41,7 +41,6 @@ function App() {
       destinationY: dy,
     }
     setDropAreas(dropAreas => [...dropAreas, newDropArea])
-    //console.log(dropAreas)
   }
 
 
@@ -54,7 +53,7 @@ function App() {
         <RemoveArea></RemoveArea>
         <CreateDropArea></CreateDropArea>
         <CreateDistractor></CreateDistractor>
-        <ExportQTI></ExportQTI>
+        <ExportQTI dropAreas={dropAreas} dragElements={dragElements}></ExportQTI>
       </div>
 
       <div className="MainArea">
