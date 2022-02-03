@@ -1,29 +1,14 @@
 import item from "../qti_template/blankItem.xml"
 import manifest from "../qti_template/imsmanifest.xml"
+import JSZip from "jszip";
 
 function ExportQTI(props) {
+    var itemDocString = null
 
     function generateQtiItem(xmlString) {
-        // //create document and root element with its attributes
-        // var doc = document.implementation.createDocument("http://www.imsglobal.org/xsd/imsqti_v2p2", "assessmentItem", null)
-        // const pi = doc.createProcessingInstruction('xml', 'version="1.0" encoding="UTF-8"');
-        // doc.insertBefore(pi, doc.firstChild);
-        // //doc.documentElement.setAttribute("xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        // //doc.documentElement.setAttributeNS("http://www.imsglobal.org/xsd/imsqti_v2p2", "xsi", "http://www.w3.org/2001/XMLSchema-instance")
-        // doc.documentElement.setAttribute("xmlns:inspera", "http://www.inspera.no/qti")
-
-        // var body = document.createElementNS('http://www.w3.org/1999/xhtml', 'body')
-        // body.setAttribute('id', 'abc')
-        // doc.documentElement.appendChild(body)
-
-        // console.log(new XMLSerializer().serializeToString(doc));
-
-
-
 
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xmlString,"text/xml");
-
         let interaction = xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0]
 
         //Create the drag elements
@@ -33,19 +18,20 @@ function ExportQTI(props) {
             newGapImg.setAttribute("identifier", "A"+String(i+1))
             newGapImg.setAttribute("matchMax", "0")
             newGapImg.setAttribute("matchMin", "0")
-            //object
+            //object - generate resource id for the drag elements
             let newGapImgObject = xmlDoc.createElement("object")
-            let res = "resources/ID_103871406.png"
-            newGapImgObject.setAttribute("data", res)
+            let resId = "resources/ID_" + String(100000000+i) + ".png"
+            props.dragElements[i].id = resId.substring(10)
+            newGapImgObject.setAttribute("data", resId)
             newGapImgObject.setAttribute("type", "image/png")
             newGapImgObject.setAttribute("objectLabel", "")
             newGapImgObject.setAttribute("widt", props.dragElements[i].width) //These two are less than the original size, set by orgWidth..
             newGapImgObject.setAttribute("height", props.dragElements[i].height)
             newGapImgObject.setAttribute("inspera:orgWidth", props.dragElements[i].width)
             newGapImgObject.setAttribute("inspera:orgHeight", props.dragElements[i].height)
-            newGapImgObject.setAttribute("inspera:logicalName", "HEHE")
+            newGapImgObject.setAttribute("inspera:logicalName", "asd")
             newGapImgObject.setAttribute("inspera:objectType", "content_image")
-            
+        
             newGapImg.appendChild(newGapImgObject)
             interaction.appendChild(newGapImg)
         }
@@ -59,15 +45,15 @@ function ExportQTI(props) {
             hotspot.setAttribute("coords", coords)
             interaction.appendChild(hotspot)
         }
+        
 
-
+        itemDocString = new XMLSerializer().serializeToString(xmlDoc)
+        console.log(itemDocString)
 
         console.log("------------NEW-------------")
         console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
-        console.log("------------STATE-------------")
-        console.log(props.dragElements)
-        console.log(props.dropAreas)
     }
+
 
     function generateQtiManifest() {
 
@@ -87,6 +73,7 @@ function ExportQTI(props) {
                 let mt = await m.text()
                 generateQtiManifest(mt)
             }}>Export QTI</button>
+
             <button className="sidebtn" onClick={async () => { //Print original file
                 let i = await fetch(item)
                 let it = await i.text()
@@ -95,6 +82,43 @@ function ExportQTI(props) {
                 console.log("------------ORIGINAL-------------")
                 console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
             }}>log original qti</button>
+
+            <button className="sidebtn" onClick={async () => {
+                //Item file
+                let i = await fetch(item)
+                let it = await i.text()
+                generateQtiItem(it)
+                
+                //manifest file
+                let m = await fetch(manifest)
+                let mt = await m.text()
+                generateQtiManifest(mt)
+
+                //zip item
+                var zip = new JSZip();
+                zip.file("Hello.xml", itemDocString);
+
+                //zip resources
+                var img = zip.folder("resources")
+                for(let i = 0; i < props.dragElements.length; i++) {
+                    let base64Img = props.dragElements[i].src.replace(/^data:image\/(png|jpg);base64,/, "");
+                    img.file(props.dragElements[i].id, base64Img, {base64: true});
+                }
+
+                //Download
+                zip.generateAsync({type:"blob"}).then(function(content) {
+                    console.log(content)
+                    let link = document.createElement("a");
+                    link.download = "QTI"
+                    link.href = URL.createObjectURL(content);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    // in case the Blob uses a lot of memory
+                    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+                });
+
+            }}>Download</button>
         </div>
     )
 }
