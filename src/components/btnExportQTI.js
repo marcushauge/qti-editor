@@ -1,9 +1,14 @@
 import item from "../qti_template/blankItem.xml"
 import manifest from "../qti_template/imsmanifest.xml"
 import JSZip from "jszip";
+import { useRef } from "react";
 
 function ExportQTI(props) {
     var itemDocString = null
+    var manifestDocString = null
+
+    const hiddenCanvasRef = useRef(null)
+
 
     function generateQtiItem(xmlString) {
 
@@ -48,42 +53,105 @@ function ExportQTI(props) {
         
 
         itemDocString = new XMLSerializer().serializeToString(xmlDoc)
-        console.log(itemDocString)
+        //console.log(itemDocString)
 
         console.log("------------NEW-------------")
         console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
     }
 
 
-    function generateQtiManifest() {
+    function generateQtiManifest(xmlString) {
 
+        let parser = new DOMParser();
+        let xmlDoc = parser.parseFromString(xmlString,"text/xml");
+        let resource = xmlDoc.getElementsByTagName("resource")[0]
+        
+
+        //Create the drag elements
+        for(let i = 0; i < props.dragElements.length; i++) {
+           
+        }
+        //Create the drop areas
+        for(let i = 0; i < props.dropAreas.length; i++) {
+            
+        }
+        
+        // manifestDocString = new XMLSerializer().serializeToString(xmlDoc)
+        // console.log(manifestDocString)
+
+    }
+
+    function getModifiedBackgroundImg() {
+
+        //DEBUGGING - still only part of the bg img
+        console.log(props.bgImg) //blob
+        console.log(typeof(props.bgImg)) //string
+        let newBlob = new Blob([props.bgImg], {type : 'image/png'})
+        var reader = new FileReader();
+        reader.readAsDataURL(newBlob); 
+        reader.onloadend = function() {
+            var base64data = reader.result;                
+            console.log(base64data);
+        }
+
+
+
+        return new Promise((resolve, reject) => {
+            var ctx = hiddenCanvasRef.current.getContext("2d")
+            let img = new Image()
+            img.onload = () => {
+                //Setup canvas
+                console.log("BG DIMENSIONS: " + img.width + ", " + img.height) //CORRECT
+                hiddenCanvasRef.current.width = img.width
+                hiddenCanvasRef.current.width = img.height
+                hiddenCanvasRef.current.style.width = img.width
+                hiddenCanvasRef.current.style.height = img.height
+                //ctx.setTransform(1, 0, 0, 1, 0, 0); //reset scale
+                //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                ctx.drawImage(img, 0, 0, img.width, img.height);
+                //clear the drop areas
+                props.dropAreas.forEach(d => {
+                    ctx.clearRect(d.startX, d.startY, d.destinationX, d.destinationY)
+                });
+                hiddenCanvasRef.current.toDataURL()
+                resolve(hiddenCanvasRef.current.toDataURL())
+            }
+            img.onerror = reject
+            img.src = props.bgImg
+        })
+
+        // //Get img size
+        // let width = 0
+        // let height = 0
+        // let i = new Image(); 
+        // i.onload = function(){
+        //     width = i.width
+        //     height = i.height
+        // }
+        // i.src = props.bgImg
+
+        // var ctx = hiddenCanvas.current.getContext("2d")
+        // var img = new Image();
+        // img.onload = function() {
+        //     ctx.setTransform(1, 0, 0, 1, 0, 0); //reset scale
+        //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+        //     ctx.drawImage(img, 0, 0, img.width, img.height);
+        //     //clear the drop areas
+        //     props.dropAreas.forEach(d => {
+        //         ctx.clearRect(d.startX, d.startY, d.destinationX, d.destinationY)
+        //     });
+        // }
+        // img.src = props.bgImg
     }
 
 
     return (
         <div>
             <button className="sidebtn" id="exportbtn" onClick={async () => {
-                //Item file
-                let i = await fetch(item)
-                let it = await i.text()
-                generateQtiItem(it)
-                
-                //manifest file
-                let m = await fetch(manifest)
-                let mt = await m.text()
-                generateQtiManifest(mt)
-            }}>Export QTI</button>
 
-            <button className="sidebtn" onClick={async () => { //Print original file
-                let i = await fetch(item)
-                let it = await i.text()
-                let parser = new DOMParser();
-                let xmlDoc = parser.parseFromString(it,"text/xml");
-                console.log("------------ORIGINAL-------------")
-                console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
-            }}>log original qti</button>
+                let bg = await getModifiedBackgroundImg()
+                //console.log(bg)
 
-            <button className="sidebtn" onClick={async () => {
                 //Item file
                 let i = await fetch(item)
                 let it = await i.text()
@@ -96,7 +164,7 @@ function ExportQTI(props) {
 
                 //zip item
                 var zip = new JSZip();
-                zip.file("Hello.xml", itemDocString);
+                zip.file("ID_99999999-item.xml", itemDocString);
 
                 //zip resources
                 var img = zip.folder("resources")
@@ -107,7 +175,7 @@ function ExportQTI(props) {
 
                 //Download
                 zip.generateAsync({type:"blob"}).then(function(content) {
-                    console.log(content)
+                    //console.log(content)
                     let link = document.createElement("a");
                     link.download = "QTI"
                     link.href = URL.createObjectURL(content);
@@ -117,8 +185,19 @@ function ExportQTI(props) {
                     // in case the Blob uses a lot of memory
                     setTimeout(() => URL.revokeObjectURL(link.href), 7000);
                 });
+            }}>Export QTI</button>
 
-            }}>Download</button>
+            <button className="sidebtn" onClick={async () => { //Print original file
+                let i = await fetch(item)
+                let it = await i.text()
+                let parser = new DOMParser();
+                let xmlDoc = parser.parseFromString(it,"text/xml");
+                console.log("------------ORIGINAL-------------")
+                console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
+            }}>log original qti</button>
+
+            <canvas ref={hiddenCanvasRef} width="400" height="400"  style={{display: "none"}}></canvas>
+
         </div>
     )
 }

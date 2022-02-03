@@ -52,6 +52,9 @@ function ImageViewer(props) {
             width: dWidth,
             height: dHeight
           }
+          console.log("Creating drag element-----------")
+          console.log(newDragEl.src)
+          console.log("Creating------------------------")
           setNewDragElement(newDragEl)
           setNewDropArea([sx, sy, sWidth, sHeight])
         }

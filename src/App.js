@@ -53,7 +53,7 @@ function App() {
         <RemoveArea></RemoveArea>
         <CreateDropArea></CreateDropArea>
         <CreateDistractor></CreateDistractor>
-        <ExportQTI dropAreas={dropAreas} dragElements={dragElements}></ExportQTI>
+        <ExportQTI dropAreas={dropAreas} dragElements={dragElements} bgImg={bgImg}></ExportQTI>
       </div>
 
       <div className="MainArea">
