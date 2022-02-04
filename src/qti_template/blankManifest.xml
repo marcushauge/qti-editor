@@ -15,7 +15,7 @@
         </imsmd:lom>
     </metadata>
     <resources>
-        <resource identifier="ID_103871416" type="imsqti_item_xmlv2p2" href="ID_103871416-item.xml">
+        <resource identifier="ID_99999999-item" type="imsqti_item_xmlv2p2" href="ID_99999999-item.xml">
             <metadata>
                 <imsmd:lom>
                     <imsmd:general>
@@ -38,7 +38,7 @@
                             <imsmd:taxon>
                                 <imsmd:id>contentRevisionId</imsmd:id>
                                 <imsmd:entry>
-                                    <imsmd:langstring>103871416</imsmd:langstring>
+                                    <imsmd:langstring>99999999</imsmd:langstring>
                                 </imsmd:entry>
                             </imsmd:taxon>
                             <imsmd:taxon>
@@ -51,8 +51,8 @@
                     </imsmd:classification>
                 </imsmd:lom>
             </metadata>
-            <file href="ID_103871416-item.xml" />
-            <file href="resources/graphicgapmatch_default_bg.jpg" />
+            <file href="ID_99999999-item.xml" />
+            <file href="resources/background.png" />
             <file href="resources/ID_103871406.png" />
         </resource>
     </resources>

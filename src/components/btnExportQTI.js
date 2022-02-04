@@ -1,5 +1,5 @@
 import item from "../qti_template/blankItem.xml"
-import manifest from "../qti_template/imsmanifest.xml"
+import manifest from "../qti_template/blankManifest.xml"
 import JSZip from "jszip";
 import { useRef } from "react";
 
@@ -11,6 +11,8 @@ function ExportQTI(props) {
 
     const debugImgRef = useRef(null)
     const debugCanvasRef = useRef(null)
+
+    const BGFILENAME = "background.png"
 
     function generateQtiItem(xmlString) {
 
@@ -55,10 +57,7 @@ function ExportQTI(props) {
         
 
         itemDocString = new XMLSerializer().serializeToString(xmlDoc)
-        //console.log(itemDocString)
-
-        // console.log("------------NEW-------------")
-        // console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
+        console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
     }
 
 
@@ -68,46 +67,22 @@ function ExportQTI(props) {
         let xmlDoc = parser.parseFromString(xmlString,"text/xml");
         let resource = xmlDoc.getElementsByTagName("resource")[0]
         
-
         //Create the drag elements
         for(let i = 0; i < props.dragElements.length; i++) {
-           
+           let newFileTag = xmlDoc.createElement("file")
+           console.log(newFileTag)
+           newFileTag.setAttribute("href", "resources/" + props.dragElements[i].id)
+           resource.appendChild(newFileTag)
         }
         //Create the drop areas
         for(let i = 0; i < props.dropAreas.length; i++) {
             
         }
         
-        // manifestDocString = new XMLSerializer().serializeToString(xmlDoc)
-        // console.log(manifestDocString)
-
+        manifestDocString = new XMLSerializer().serializeToString(xmlDoc)
     }
 
     function getModifiedBackgroundImg() {
-
-        //DEBUGGING - still only part of the bg img
-        // console.log(props.bgImg) //blob
-        // console.log(typeof(props.bgImg)) //string
-        // let newBlob = new Blob([props.bgImg], {type : 'image/png'})
-        // var reader = new FileReader();
-        // reader.readAsDataURL(newBlob); 
-        // reader.onloadend = function() {
-        //     var base64data = reader.result;
-        //     console.log("bg blob is now base64:")
-        //     console.log(base64data); //This one is empty
-        // }
-
-        // debugImgRef.current.src = props.bgImg //This works
-        // //So lets try to draw on canvas instead of img:
-        // let debugCtx = debugCanvasRef.current.getContext("2d")
-        // let bg = new Image()
-        // bg.onload = () => {
-        //     debugCtx.drawImage(bg, 0, 0, bg.width, bg.height)
-        // }
-        // bg.src = props.bgImg
-        // //IT worked!
-        
-
 
         return new Promise((resolve, reject) => {
             var ctx = hiddenCanvasRef.current.getContext("2d")
@@ -133,28 +108,6 @@ function ExportQTI(props) {
             img.src = props.bgImg
         })
 
-        // //Get img size
-        // let width = 0
-        // let height = 0
-        // let i = new Image(); 
-        // i.onload = function(){
-        //     width = i.width
-        //     height = i.height
-        // }
-        // i.src = props.bgImg
-
-        // var ctx = hiddenCanvas.current.getContext("2d")
-        // var img = new Image();
-        // img.onload = function() {
-        //     ctx.setTransform(1, 0, 0, 1, 0, 0); //reset scale
-        //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        //     ctx.drawImage(img, 0, 0, img.width, img.height);
-        //     //clear the drop areas
-        //     props.dropAreas.forEach(d => {
-        //         ctx.clearRect(d.startX, d.startY, d.destinationX, d.destinationY)
-        //     });
-        // }
-        // img.src = props.bgImg
     }
 
 
@@ -175,9 +128,10 @@ function ExportQTI(props) {
                 let mt = await m.text()
                 generateQtiManifest(mt)
 
-                //zip item
+                //zip item and manifest
                 var zip = new JSZip();
-                zip.file("ID_99999999-item.xml", itemDocString);
+                zip.file("ID_99999999-item.xml", itemDocString)
+                zip.file("imsmanifest.xml", manifestDocString)
 
                 //zip other resources
                 var img = zip.folder("resources")
@@ -186,7 +140,7 @@ function ExportQTI(props) {
                     img.file(props.dragElements[i].id, base64Img, {base64: true})
                 }
                 let base64bgImg = bg.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
-                img.file("background.png", base64bgImg, {base64: true})
+                img.file(BGFILENAME, base64bgImg, {base64: true})
 
                 //Download
                 zip.generateAsync({type:"blob"}).then(function(content) {
@@ -212,10 +166,6 @@ function ExportQTI(props) {
             }}>log original qti</button>
 
             <canvas ref={hiddenCanvasRef} width="400" height="400"  style={{display: "none"}}></canvas>
-            
-            {/*DEBUGGING */}
-            {/* <img ref={debugImgRef}></img>
-            <canvas ref={debugCanvasRef} width="600" height="600"></canvas> */}
 
         </div>
     )
