@@ -9,6 +9,8 @@ function ExportQTI(props) {
 
     const hiddenCanvasRef = useRef(null)
 
+    const debugImgRef = useRef(null)
+    const debugCanvasRef = useRef(null)
 
     function generateQtiItem(xmlString) {
 
@@ -55,8 +57,8 @@ function ExportQTI(props) {
         itemDocString = new XMLSerializer().serializeToString(xmlDoc)
         //console.log(itemDocString)
 
-        console.log("------------NEW-------------")
-        console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
+        // console.log("------------NEW-------------")
+        // console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
     }
 
 
@@ -84,16 +86,27 @@ function ExportQTI(props) {
     function getModifiedBackgroundImg() {
 
         //DEBUGGING - still only part of the bg img
-        console.log(props.bgImg) //blob
-        console.log(typeof(props.bgImg)) //string
-        let newBlob = new Blob([props.bgImg], {type : 'image/png'})
-        var reader = new FileReader();
-        reader.readAsDataURL(newBlob); 
-        reader.onloadend = function() {
-            var base64data = reader.result;                
-            console.log(base64data);
-        }
+        // console.log(props.bgImg) //blob
+        // console.log(typeof(props.bgImg)) //string
+        // let newBlob = new Blob([props.bgImg], {type : 'image/png'})
+        // var reader = new FileReader();
+        // reader.readAsDataURL(newBlob); 
+        // reader.onloadend = function() {
+        //     var base64data = reader.result;
+        //     console.log("bg blob is now base64:")
+        //     console.log(base64data); //This one is empty
+        // }
 
+        // debugImgRef.current.src = props.bgImg //This works
+        // //So lets try to draw on canvas instead of img:
+        // let debugCtx = debugCanvasRef.current.getContext("2d")
+        // let bg = new Image()
+        // bg.onload = () => {
+        //     debugCtx.drawImage(bg, 0, 0, bg.width, bg.height)
+        // }
+        // bg.src = props.bgImg
+        // //IT worked!
+        
 
 
         return new Promise((resolve, reject) => {
@@ -103,7 +116,7 @@ function ExportQTI(props) {
                 //Setup canvas
                 console.log("BG DIMENSIONS: " + img.width + ", " + img.height) //CORRECT
                 hiddenCanvasRef.current.width = img.width
-                hiddenCanvasRef.current.width = img.height
+                hiddenCanvasRef.current.height = img.height
                 hiddenCanvasRef.current.style.width = img.width
                 hiddenCanvasRef.current.style.height = img.height
                 //ctx.setTransform(1, 0, 0, 1, 0, 0); //reset scale
@@ -149,8 +162,8 @@ function ExportQTI(props) {
         <div>
             <button className="sidebtn" id="exportbtn" onClick={async () => {
 
+                //Background image
                 let bg = await getModifiedBackgroundImg()
-                //console.log(bg)
 
                 //Item file
                 let i = await fetch(item)
@@ -166,24 +179,26 @@ function ExportQTI(props) {
                 var zip = new JSZip();
                 zip.file("ID_99999999-item.xml", itemDocString);
 
-                //zip resources
+                //zip other resources
                 var img = zip.folder("resources")
                 for(let i = 0; i < props.dragElements.length; i++) {
-                    let base64Img = props.dragElements[i].src.replace(/^data:image\/(png|jpg);base64,/, "");
-                    img.file(props.dragElements[i].id, base64Img, {base64: true});
+                    let base64Img = props.dragElements[i].src.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
+                    img.file(props.dragElements[i].id, base64Img, {base64: true})
                 }
+                let base64bgImg = bg.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
+                img.file("background.png", base64bgImg, {base64: true})
 
                 //Download
                 zip.generateAsync({type:"blob"}).then(function(content) {
                     //console.log(content)
-                    let link = document.createElement("a");
+                    let link = document.createElement("a")
                     link.download = "QTI"
-                    link.href = URL.createObjectURL(content);
+                    link.href = URL.createObjectURL(content)
                     document.body.appendChild(link);
-                    link.click();
+                    link.click()
                     document.body.removeChild(link);
                     // in case the Blob uses a lot of memory
-                    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+                    setTimeout(() => URL.revokeObjectURL(link.href), 7000)
                 });
             }}>Export QTI</button>
 
@@ -197,6 +212,10 @@ function ExportQTI(props) {
             }}>log original qti</button>
 
             <canvas ref={hiddenCanvasRef} width="400" height="400"  style={{display: "none"}}></canvas>
+            
+            {/*DEBUGGING */}
+            {/* <img ref={debugImgRef}></img>
+            <canvas ref={debugCanvasRef} width="600" height="600"></canvas> */}
 
         </div>
     )

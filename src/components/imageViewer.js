@@ -52,9 +52,6 @@ function ImageViewer(props) {
             width: dWidth,
             height: dHeight
           }
-          console.log("Creating drag element-----------")
-          console.log(newDragEl.src)
-          console.log("Creating------------------------")
           setNewDragElement(newDragEl)
           setNewDropArea([sx, sy, sWidth, sHeight])
         }
@@ -70,14 +67,12 @@ function ImageViewer(props) {
                     if(props.createDragElementPressed) {
                         startMouseX = getMousePos(event).x
                         startMouseY = getMousePos(event).y
-                        console.log(startMouseX + " and " + startMouseY)
                     }
                 }}
                 onMouseUp={(event) => {
                     if(props.createDragElementPressed) {
                         stopMouseX = getMousePos(event).x
                         stopMouseY = getMousePos(event).y
-                        console.log(stopMouseX + " and " + stopMouseY)
                         createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                     }
                 }}>
