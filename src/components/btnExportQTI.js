@@ -2,6 +2,7 @@ import item from "../qti_template/blankItem.xml"
 import manifest from "../qti_template/blankManifest.xml"
 import JSZip from "jszip";
 import { useRef } from "react";
+import aboxImg from "../qti_template/resources/ID_103871406.png"
 
 function ExportQTI(props) {
     var itemDocString = null
@@ -20,6 +21,11 @@ function ExportQTI(props) {
         let xmlDoc = parser.parseFromString(xmlString,"text/xml");
         let interaction = xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0]
         let qtiNamespace = "http://www.imsglobal.org/xsd/imsqti_v2p2"
+
+        //Create background element
+        let newBgObject = xmlDoc.getElementsByTagName("object")[0]
+        newBgObject.setAttribute("data", "resources/"+BGFILENAME)
+
 
         //Create the drag elements
         for(let i = 0; i < props.dragElements.length; i++) {
@@ -163,6 +169,11 @@ function ExportQTI(props) {
                 }
                 let base64bgImg = bg.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
                 img.file(BGFILENAME, base64bgImg, {base64: true})
+
+                let boxImgFile = await fetch(aboxImg)
+                let boxImgUrl = await boxImgFile.url
+                let base64BoxImg = boxImgUrl.replace(/^data:image\/(png|jpg);base64,/, "")
+                img.file("ID_103871406.png", base64BoxImg, {base64: true})
 
                 //Download
                 zip.generateAsync({type:"blob"}).then(function(content) {
