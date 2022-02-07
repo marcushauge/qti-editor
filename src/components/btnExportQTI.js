@@ -19,16 +19,18 @@ function ExportQTI(props) {
         let parser = new DOMParser();
         let xmlDoc = parser.parseFromString(xmlString,"text/xml");
         let interaction = xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0]
+        let qtiNamespace = "http://www.imsglobal.org/xsd/imsqti_v2p2"
 
         //Create the drag elements
         for(let i = 0; i < props.dragElements.length; i++) {
             //gapImg
-            let newGapImg = xmlDoc.createElement("gapImg")
-            newGapImg.setAttribute("identifier", "A"+String(i+1))
+            //let newGapImg = xmlDoc.createElement("gapImg")
+            let newGapImg = xmlDoc.createElementNS(qtiNamespace, "gapImg")
+            newGapImg.setAttribute("identifier", "A"+String(i+2))
             newGapImg.setAttribute("matchMax", "0")
             newGapImg.setAttribute("matchMin", "0")
             //object - generate resource id for the drag elements
-            let newGapImgObject = xmlDoc.createElement("object")
+            let newGapImgObject = xmlDoc.createElementNS(qtiNamespace, "object")
             let resId = "resources/ID_" + String(100000000+i) + ".png"
             props.dragElements[i].id = resId.substring(10)
             newGapImgObject.setAttribute("data", resId)
@@ -42,18 +44,38 @@ function ExportQTI(props) {
             newGapImgObject.setAttribute("inspera:objectType", "content_image")
         
             newGapImg.appendChild(newGapImgObject)
-            interaction.appendChild(newGapImg)
+            interaction.insertBefore(newGapImg, xmlDoc.getElementsByTagName("associableHotspot")[0])
+            //interaction.appendChild(newGapImg)
         }
         //Create the drop areas
         for(let i = 0; i < props.dropAreas.length; i++) {
-            let hotspot = xmlDoc.createElement("associableHotspot")
-            hotspot.setAttribute("identifier", "GAP"+String(i+1))
+            let hotspot = xmlDoc.createElementNS(qtiNamespace, "associableHotspot")
+            hotspot.setAttribute("identifier", "GAP"+String(i+2))
             hotspot.setAttribute("matchMax", "1")
             hotspot.setAttribute("shape", "rect")
             let coords =String(props.dropAreas[i].startX) + "," + String(props.dropAreas[i].startY) + "," + String(props.dropAreas[i].destinationX) + "," + String(props.dropAreas[i].destinationY)
             hotspot.setAttribute("coords", coords)
             interaction.appendChild(hotspot)
         }
+
+        //Create the correctResponse value elements and create mapping -> mapEntry elements
+        let correctResponse = xmlDoc.getElementsByTagName("correctResponse")[0]
+        let mapping = xmlDoc.getElementsByTagName("mapping")[0]
+        for(let i = 0; i < props.dragElements.length; i++) {
+            let pair = "A"+String(i+2)+" GAP"+String(i+2)
+            let pairTextNode = xmlDoc.createTextNode(pair)
+            let newValueElement = xmlDoc.createElementNS(qtiNamespace, "value")
+            newValueElement.appendChild(pairTextNode)
+            correctResponse.appendChild(newValueElement)
+
+            let newMapEntry = xmlDoc.createElementNS(qtiNamespace, "mapEntry")
+            newMapEntry.setAttribute("mapKey", pair)
+            newMapEntry.setAttribute("mappedValue", "1")
+            mapping.appendChild(newMapEntry)
+        }
+
+
+        //Set responseProcessing stuff
         
 
         itemDocString = new XMLSerializer().serializeToString(xmlDoc)
