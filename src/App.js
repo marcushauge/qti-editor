@@ -13,15 +13,29 @@ import ExportQTI from './components/btnExportQTI';
 function App() {
 
   const [bgImg, setBgImg] = useState()
-  const [createDragElementPressed, setCreateDragElementPressed] = useState(false)
   const [dragElements, setDragElements] = useState([])
   const [dropAreas, setDropAreas] = useState([])
+  const [erasedAreas, setErasedAreas] = useState([])
+
+  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false})
 
   const canvasRef = useRef(null)
 
   //For highlighting button and enabling marking feature
-  function switchCreateDragElement() {
-    setCreateDragElementPressed(createDragElementPressed => !createDragElementPressed)
+  function switchButtonHighlight(button) {
+    let newState = {...buttonHighlighting}
+    //On second click
+    if(buttonHighlighting[button] === true) {
+      newState[button] = false
+    }
+    else if(button === "clear") {
+      Object.keys(newState).forEach(v => newState[v] = false)
+    }
+    else {
+      Object.keys(newState).forEach(v => newState[v] = false)
+      newState[button] = true
+    }
+    setButtonHighlighting(newState)
   }
 
   function addDragElement(imgSrc, width, height) {
@@ -43,25 +57,40 @@ function App() {
     setDropAreas(dropAreas => [...dropAreas, newDropArea])
   }
 
+  function addErasedArea(sx, sy, dx, dy) {
+    let newErasedArea = {
+      startX: sx,
+      startY: sy,
+      destinationX: dx,
+      destinationY: dy,
+    }
+    setErasedAreas(erasedAreas => [...erasedAreas, newErasedArea])
+    console.log(erasedAreas)
+  }
+
 
   return (
-    <div className="App" style={{cursor: createDragElementPressed? "crosshair" : "default"}}>
+    <div className="App" style={{cursor: buttonHighlighting.createDragElement || buttonHighlighting.removeArea ? "crosshair" : "default"}}>
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
-        <CreateDragElement click={() => {switchCreateDragElement()}} clicked={createDragElementPressed} id="createDragElementBtn"></CreateDragElement>
-        <RemoveArea></RemoveArea>
+        <CreateDragElement click={() => {switchButtonHighlight("createDragElement")}} clicked={buttonHighlighting.createDragElement}></CreateDragElement>
+        <RemoveArea clicked={buttonHighlighting.removeArea} click={() => {switchButtonHighlight("removeArea")}}></RemoveArea>
         <CreateDropArea></CreateDropArea>
         <CreateDistractor></CreateDistractor>
-        <ExportQTI dropAreas={dropAreas} dragElements={dragElements} bgImg={bgImg}></ExportQTI>
+        <ExportQTI dropAreas={dropAreas} dragElements={dragElements} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
       <div className="MainArea">
-        <ImageViewer bgImg={bgImg} createDragElementPressed={createDragElementPressed}
+        <ImageViewer bgImg={bgImg} createDragElementPressed={buttonHighlighting.createDragElement}
+        removeAreaPressed={buttonHighlighting.removeArea}
         addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
-        switchCreateDragElement={() => {switchCreateDragElement()}}
+        clearButtonHighlight={() => {switchButtonHighlight("clear")}}
         dropAreas={dropAreas}
         addDropArea={(sx, sy, dx, dy) => {addDropArea(sx, sy, dx, dy)}}
+        addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
+        pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
+        erasedAreas={erasedAreas}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>

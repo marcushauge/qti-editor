@@ -5,10 +5,6 @@ function CreateDragElement(props) {
             
             props.click()
             
-            
-
-            //On mouse release
-            //props.drawProp()
         }} style={{filter: props.clicked ? "brightness(80%)" : "brightness(100%)"}}>Create drag element</button>
     )
 }

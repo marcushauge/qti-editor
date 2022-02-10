@@ -129,11 +129,15 @@ function ExportQTI(props) {
                 hiddenCanvasRef.current.style.height = img.height
                 //ctx.setTransform(1, 0, 0, 1, 0, 0); //reset scale
                 //ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                ctx.drawImage(img, 0, 0, img.width, img.height);
+                ctx.drawImage(img, 0, 0, img.width, img.height)
                 //clear the drop areas
                 props.dropAreas.forEach(d => {
                     ctx.clearRect(d.startX, d.startY, d.destinationX, d.destinationY)
-                });
+                })
+                //Clear erased areas
+                props.erasedAreas.forEach(a => {
+                    ctx.clearRect(a.startX, a.startY, a.destinationX, a.destinationY)
+                })
                 hiddenCanvasRef.current.toDataURL()
                 resolve(hiddenCanvasRef.current.toDataURL())
             }
