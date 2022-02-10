@@ -25,6 +25,10 @@ function ExportQTI(props) {
         //Create background element
         let newBgObject = xmlDoc.getElementsByTagName("object")[0]
         newBgObject.setAttribute("data", "resources/"+BGFILENAME)
+        let img = new Image()
+        img.src = props.bgImg
+        newBgObject.setAttribute("width", String(img.width))
+
 
 
         //Create the drag elements
@@ -42,7 +46,7 @@ function ExportQTI(props) {
             newGapImgObject.setAttribute("data", resId)
             newGapImgObject.setAttribute("type", "image/png")
             newGapImgObject.setAttribute("objectLabel", "")
-            newGapImgObject.setAttribute("widt", props.dragElements[i].width) //These two are less than the original size, set by orgWidth..
+            newGapImgObject.setAttribute("width", props.dragElements[i].width) //These two are less than the original size, set by orgWidth..
             newGapImgObject.setAttribute("height", props.dragElements[i].height)
             newGapImgObject.setAttribute("inspera:orgWidth", props.dragElements[i].width)
             newGapImgObject.setAttribute("inspera:orgHeight", props.dragElements[i].height)
@@ -59,7 +63,8 @@ function ExportQTI(props) {
             hotspot.setAttribute("identifier", "GAP"+String(i+2))
             hotspot.setAttribute("matchMax", "1")
             hotspot.setAttribute("shape", "rect")
-            let coords =String(props.dropAreas[i].startX) + "," + String(props.dropAreas[i].startY) + "," + String(props.dropAreas[i].destinationX) + "," + String(props.dropAreas[i].destinationY)
+            let coords = String(props.dropAreas[i].startX) + "," + String(props.dropAreas[i].startY) + 
+            "," + String(props.dropAreas[i].destinationX+props.dropAreas[i].startX) + "," + String(props.dropAreas[i].destinationY+props.dropAreas[i].startY)
             hotspot.setAttribute("coords", coords)
             interaction.appendChild(hotspot)
         }
