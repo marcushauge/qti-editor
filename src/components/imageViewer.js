@@ -92,8 +92,10 @@ function ImageViewer(props) {
 
                     if(props.createDragElementPressed) {
                         //Create drag element and drop area
-                        props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
-                        props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                        let dragId = props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
+                        let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                        console.log("drag and drop ids: " + dragId + ", " + dropId)
+                        props.addAnswerPair(dragId, dropId)
                     }
                     else if(props.removeAreaPressed) {
                         props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])

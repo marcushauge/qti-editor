@@ -36,13 +36,13 @@ function ExportQTI(props) {
             //gapImg
             //let newGapImg = xmlDoc.createElement("gapImg")
             let newGapImg = xmlDoc.createElementNS(qtiNamespace, "gapImg")
-            newGapImg.setAttribute("identifier", "A"+String(i+2))
+            newGapImg.setAttribute("identifier", "A"+String(props.dragElements[i].id))
             newGapImg.setAttribute("matchMax", "0")
             newGapImg.setAttribute("matchMin", "0")
             //object - generate resource id for the drag elements
             let newGapImgObject = xmlDoc.createElementNS(qtiNamespace, "object")
-            let resId = "resources/ID_" + String(100000000+i) + ".png"
-            props.dragElements[i].id = resId.substring(10)
+            let resId = "resources/ID_" + String(props.dragElements[i].dataId) + ".png"
+            //props.dragElements[i].id = resId.substring(10)
             newGapImgObject.setAttribute("data", resId)
             newGapImgObject.setAttribute("type", "image/png")
             newGapImgObject.setAttribute("objectLabel", "")
@@ -60,7 +60,7 @@ function ExportQTI(props) {
         //Create the drop areas
         for(let i = 0; i < props.dropAreas.length; i++) {
             let hotspot = xmlDoc.createElementNS(qtiNamespace, "associableHotspot")
-            hotspot.setAttribute("identifier", "GAP"+String(i+2))
+            hotspot.setAttribute("identifier", "GAP"+String(props.dropAreas.id))
             hotspot.setAttribute("matchMax", "1")
             hotspot.setAttribute("shape", "rect")
             let coords = String(props.dropAreas[i].startX) + "," + String(props.dropAreas[i].startY) + 
@@ -72,8 +72,21 @@ function ExportQTI(props) {
         //Create the correctResponse value elements and create mapping -> mapEntry elements
         let correctResponse = xmlDoc.getElementsByTagName("correctResponse")[0]
         let mapping = xmlDoc.getElementsByTagName("mapping")[0]
-        for(let i = 0; i < props.dragElements.length; i++) {
-            let pair = "A"+String(i+2)+" GAP"+String(i+2)
+        // for(let i = 0; i < props.dragElements.length; i++) {
+        //     let pair = "A"+String(i+2)+" GAP"+String(i+2)
+        //     let pairTextNode = xmlDoc.createTextNode(pair)
+        //     let newValueElement = xmlDoc.createElementNS(qtiNamespace, "value")
+        //     newValueElement.appendChild(pairTextNode)
+        //     correctResponse.appendChild(newValueElement)
+
+        //     let newMapEntry = xmlDoc.createElementNS(qtiNamespace, "mapEntry")
+        //     newMapEntry.setAttribute("mapKey", pair)
+        //     newMapEntry.setAttribute("mappedValue", "1")
+        //     mapping.appendChild(newMapEntry)
+        // }
+        for(let i = 0; i < props.answerPairs.length; i++) {
+            console.log(props.answerPairs)
+            let pair = "A"+String(props.answerPairs[i].dragId) +" GAP"+String(props.answerPairs[i].dropId)
             let pairTextNode = xmlDoc.createTextNode(pair)
             let newValueElement = xmlDoc.createElementNS(qtiNamespace, "value")
             newValueElement.appendChild(pairTextNode)
@@ -174,7 +187,8 @@ function ExportQTI(props) {
                 var img = zip.folder("resources")
                 for(let i = 0; i < props.dragElements.length; i++) {
                     let base64Img = props.dragElements[i].src.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
-                    img.file(props.dragElements[i].id, base64Img, {base64: true})
+                    let resId = "ID_" + String(props.dragElements[i].dataId) + ".png"
+                    img.file(resId, base64Img, {base64: true})
                 }
                 let base64bgImg = bg.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
                 img.file(BGFILENAME, base64bgImg, {base64: true})

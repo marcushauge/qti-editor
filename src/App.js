@@ -16,8 +16,9 @@ function App() {
   const [dragElements, setDragElements] = useState([])
   const [dropAreas, setDropAreas] = useState([])
   const [erasedAreas, setErasedAreas] = useState([])
+  const [answerPairs, setAnswerPairs] = useState([])
 
-  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false})
+  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false})
 
   const canvasRef = useRef(null)
 
@@ -39,22 +40,31 @@ function App() {
   }
 
   function addDragElement(imgSrc, width, height) {
+    let newId = (dragElements[dragElements.length-1] === undefined) ? 2 : dragElements[dragElements.length-1].id+1
+    let newDataId = (dragElements[dragElements.length-1] === undefined) ? 100000000 : dragElements[dragElements.length-1].dataId+1
     let newDragEl = {
       src: imgSrc,
       width: width,
-      height: height
+      height: height,
+      id: newId,
+      dataId: newDataId
     }
     setDragElements(dragElements => [...dragElements, newDragEl])
+    return newId
   }
 
   function addDropArea(sx, sy, dx, dy) {
+    let newId = (dropAreas[dropAreas.length-1] === undefined) ? 2 : dropAreas[dropAreas.length-1].id+1
     let newDropArea = {
       startX: sx,
       startY: sy,
       destinationX: dx,
       destinationY: dy,
+      id: newId
     }
     setDropAreas(dropAreas => [...dropAreas, newDropArea])
+    console.log("Drop area added")
+    return newId
   }
 
   function addErasedArea(sx, sy, dx, dy) {
@@ -68,17 +78,23 @@ function App() {
     console.log(erasedAreas)
   }
 
+  function addAnswerPair(dragId, dropId) {
+    let newAnserPair = {dragId: dragId, dropId: dropId}
+    setAnswerPairs(answerPairs => [...answerPairs, newAnserPair])
+    console.log(answerPairs)
+  }
+
 
   return (
-    <div className="App" style={{cursor: buttonHighlighting.createDragElement || buttonHighlighting.removeArea ? "crosshair" : "default"}}>
+    <div className="App" style={{cursor: buttonHighlighting.createDragElement || buttonHighlighting.removeArea || buttonHighlighting.createDropArea ? "crosshair" : "default"}}>
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
         <CreateDragElement click={() => {switchButtonHighlight("createDragElement")}} clicked={buttonHighlighting.createDragElement}></CreateDragElement>
         <RemoveArea clicked={buttonHighlighting.removeArea} click={() => {switchButtonHighlight("removeArea")}}></RemoveArea>
-        <CreateDropArea></CreateDropArea>
+        <CreateDropArea clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></CreateDropArea>
         <CreateDistractor></CreateDistractor>
-        <ExportQTI dropAreas={dropAreas} dragElements={dragElements} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
+        <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
       <div className="MainArea">
@@ -87,7 +103,8 @@ function App() {
         addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
         clearButtonHighlight={() => {switchButtonHighlight("clear")}}
         dropAreas={dropAreas}
-        addDropArea={(sx, sy, dx, dy) => {addDropArea(sx, sy, dx, dy)}}
+        addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
+        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
         pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
         erasedAreas={erasedAreas}
