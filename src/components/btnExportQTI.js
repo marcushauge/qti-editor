@@ -30,7 +30,6 @@ function ExportQTI(props) {
         newBgObject.setAttribute("width", String(img.width))
 
 
-
         //Create the drag elements
         for(let i = 0; i < props.dragElements.length; i++) {
             //gapImg
@@ -54,13 +53,14 @@ function ExportQTI(props) {
             newGapImgObject.setAttribute("inspera:objectType", "content_image")
         
             newGapImg.appendChild(newGapImgObject)
-            interaction.insertBefore(newGapImg, xmlDoc.getElementsByTagName("associableHotspot")[0])
-            //interaction.appendChild(newGapImg)
+            //interaction.insertBefore(newGapImg, xmlDoc.getElementsByTagName("associableHotspot")[0])
+            interaction.appendChild(newGapImg)
         }
+
         //Create the drop areas
         for(let i = 0; i < props.dropAreas.length; i++) {
             let hotspot = xmlDoc.createElementNS(qtiNamespace, "associableHotspot")
-            hotspot.setAttribute("identifier", "GAP"+String(props.dropAreas.id))
+            hotspot.setAttribute("identifier", "GAP"+String(props.dropAreas[i].id))
             hotspot.setAttribute("matchMax", "1")
             hotspot.setAttribute("shape", "rect")
             let coords = String(props.dropAreas[i].startX) + "," + String(props.dropAreas[i].startY) + 
@@ -72,18 +72,6 @@ function ExportQTI(props) {
         //Create the correctResponse value elements and create mapping -> mapEntry elements
         let correctResponse = xmlDoc.getElementsByTagName("correctResponse")[0]
         let mapping = xmlDoc.getElementsByTagName("mapping")[0]
-        // for(let i = 0; i < props.dragElements.length; i++) {
-        //     let pair = "A"+String(i+2)+" GAP"+String(i+2)
-        //     let pairTextNode = xmlDoc.createTextNode(pair)
-        //     let newValueElement = xmlDoc.createElementNS(qtiNamespace, "value")
-        //     newValueElement.appendChild(pairTextNode)
-        //     correctResponse.appendChild(newValueElement)
-
-        //     let newMapEntry = xmlDoc.createElementNS(qtiNamespace, "mapEntry")
-        //     newMapEntry.setAttribute("mapKey", pair)
-        //     newMapEntry.setAttribute("mappedValue", "1")
-        //     mapping.appendChild(newMapEntry)
-        // }
         for(let i = 0; i < props.answerPairs.length; i++) {
             console.log(props.answerPairs)
             let pair = "A"+String(props.answerPairs[i].dragId) +" GAP"+String(props.answerPairs[i].dropId)
@@ -135,7 +123,7 @@ function ExportQTI(props) {
             let img = new Image()
             img.onload = () => {
                 //Setup canvas
-                console.log("BG DIMENSIONS: " + img.width + ", " + img.height) //CORRECT
+                console.log("BG DIMENSIONS: " + img.width + ", " + img.height)
                 hiddenCanvasRef.current.width = img.width
                 hiddenCanvasRef.current.height = img.height
                 hiddenCanvasRef.current.style.width = img.width

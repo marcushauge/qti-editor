@@ -3,17 +3,19 @@ import { useEffect, useRef, useState } from "react"
 function ImageViewer(props) {
     const canvasRef = useRef(null)
     const previewCanvasRef = useRef(null)
+
     const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
     const [newDragElement, setNewDragElement] = useState() //Preview element
     const [newArea, setNewArea] = useState([0, 0, 0, 0])
+    const [selectedDropArea, setSelectedDropArea]  = useState(0)
 
     var startMouseX = 0
     var startMouseY = 0
     var stopMouseX = 0
     var stopMouseY = 0
 
-    //Draw background image
     useEffect(() => {
+        //Draw background image
         var ctx = canvasRef.current.getContext("2d")
         var img = new Image();
         img.onload = function() {
@@ -65,51 +67,72 @@ function ImageViewer(props) {
     return (
         //<img src={props.bgImg} alt="Image" width="600" height="600"></img>
         <div className="imageViewer">
-            <div className="bgCanvasDiv">
-                <canvas ref={canvasRef} width="1200" height="1200" 
-                onMouseDown={(event) => {
-                    if(props.createDragElementPressed || props.removeAreaPressed) {
-                        startMouseX = getMousePos(event).x
-                        startMouseY = getMousePos(event).y
-                    }
-                }}
-                onMouseUp={(event) => {
-                    if(props.createDragElementPressed || props.removeAreaPressed) {
-                        stopMouseX = getMousePos(event).x
-                        stopMouseY = getMousePos(event).y
-                        createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
-                    }
-                }}>
-                </canvas>
+            <div className="bgCanvasArea">
+                <div className="bgCanvasDiv">
+                    <canvas ref={canvasRef} width="1200" height="1200" 
+                    onMouseDown={(event) => {
+                        if(props.createDragElementPressed || props.removeAreaPressed) {
+                            startMouseX = getMousePos(event).x
+                            startMouseY = getMousePos(event).y
+                        }
+                    }}
+                    onMouseUp={(event) => {
+                        if(props.createDragElementPressed || props.removeAreaPressed) {
+                            stopMouseX = getMousePos(event).x
+                            stopMouseY = getMousePos(event).y
+                            createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
+                        }
+                        setSelectedDropArea(0)
+                    }}
+                    >
+                    </canvas>
+                </div>
+                <div className="dropAreaDivs">
+                    {props.dropAreas.map((dropArea) => <div className="dropAreaDiv" key={dropArea.id}
+                    style={{left: dropArea.startX, top: dropArea.startY, width: dropArea.destinationX, height: dropArea.destinationY, 
+                    pointerEvents: props.pressedButton != undefined ? "none" : "auto"}}
+                    onClick={() => {setSelectedDropArea(dropArea.id)}}>{"GAP"+dropArea.id}</div>)}
+                </div>
             </div>
-            <div className="PreviewSnippetArea">
-                <h4>Preview snippet</h4>
-                <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]} style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
-                <button className="sidebtn" style={{visibility: props.createDragElementPressed || props.removeAreaPressed ? "visible" : "hidden"}} onClick={() => {
-                    if(!newDragElement) {
-                        return
-                    }
+            <div className="RightArea">
+                <div className="PreviewSnippetArea">
+                    <h4>Preview snippet</h4>
+                    <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]}
+                    style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
+                    <button className="sidebtn" style={{visibility: props.createDragElementPressed || props.removeAreaPressed ? "visible" : "hidden"}} onClick={() => {
+                        if(!newDragElement) {
+                            return
+                        }
 
-                    if(props.createDragElementPressed) {
-                        //Create drag element and drop area
-                        let dragId = props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
-                        let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
-                        console.log("drag and drop ids: " + dragId + ", " + dropId)
-                        props.addAnswerPair(dragId, dropId)
-                    }
-                    else if(props.removeAreaPressed) {
-                        props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])
-                    }
+                        if(props.createDragElementPressed) {
+                            //Create drag element and drop area
+                            let dragId = props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
+                            let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                            console.log("drag and drop ids: " + dragId + ", " + dropId)
+                            props.addAnswerPair(dragId, dropId)
+                        }
+                        else if(props.removeAreaPressed) {
+                            props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                        }
 
-                    //Clear preview and new drag element state
-                    setNewDragElement(null)
-                    setPreviewCanvasSize([30, 15])
-                    let ctx = previewCanvasRef.current.getContext("2d")
-                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                    //Un-toggle button
-                    props.clearButtonHighlight()
+                        //Clear preview and new drag element state
+                        setNewDragElement(null)
+                        setPreviewCanvasSize([30, 15])
+                        let ctx = previewCanvasRef.current.getContext("2d")
+                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                        //Un-toggle button
+                        props.clearButtonHighlight()
 
-                }}>{props.pressedButton}</button>
+                    }}>{props.pressedButton}</button>
+                </div>
+                <h4>Set drop area answer</h4>
+                <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
+                    //Change answer pair
+                    
+                    }}>
+                    {props.dragElements.map((dragElement) => <option key={dragElement.id} value={dragElement.id}>{"A"+dragElement.id}</option>)}
+                </select>
+                <button onClick={() => {console.log(props.pressedButton)}}>debug</button>
             </div>
         </div>
     )

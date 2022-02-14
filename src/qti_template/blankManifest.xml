@@ -52,8 +52,8 @@
                 </imsmd:lom>
             </metadata>
             <file href="ID_99999999-item.xml" />
-            <file href="resources/background.png" />
-            <file href="resources/ID_103871406.png" />
+            <!-- <file href="resources/background.png" />
+            <file href="resources/ID_103871406.png" /> -->
         </resource>
     </resources>
 </manifest>

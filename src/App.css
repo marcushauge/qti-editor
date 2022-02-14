@@ -99,10 +99,22 @@ input[type="file"] {
   gap: 15px;
 }
 
+.bgCanvasArea {
+  position: relative;
+}
+
 .bgCanvasDiv {
   max-width: 600px;
   max-height: 600px;
   overflow: scroll;
+}
+
+.dropAreaDiv {
+  /* background-color: aquamarine; */
+  position:absolute;
+  border-style: dashed;
+  border-width: 1px;
+  cursor: pointer;
 }
 
 .DragElementsArea {
@@ -113,6 +125,15 @@ input[type="file"] {
   flex-direction: row;
   gap: 15px;
   padding: 15px;
+}
+
+.RightArea {
+  display: flex;
+  flex-direction: column;
+  background-color: #ED474A;
+  color: #FFFFFF;
+  padding: 10px;
+  align-items: center;
 }
 
 .PreviewSnippetArea {

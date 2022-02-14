@@ -40,7 +40,7 @@ function App() {
   }
 
   function addDragElement(imgSrc, width, height) {
-    let newId = (dragElements[dragElements.length-1] === undefined) ? 2 : dragElements[dragElements.length-1].id+1
+    let newId = (dragElements[dragElements.length-1] === undefined) ? 1 : dragElements[dragElements.length-1].id+1
     let newDataId = (dragElements[dragElements.length-1] === undefined) ? 100000000 : dragElements[dragElements.length-1].dataId+1
     let newDragEl = {
       src: imgSrc,
@@ -54,7 +54,7 @@ function App() {
   }
 
   function addDropArea(sx, sy, dx, dy) {
-    let newId = (dropAreas[dropAreas.length-1] === undefined) ? 2 : dropAreas[dropAreas.length-1].id+1
+    let newId = (dropAreas[dropAreas.length-1] === undefined) ? 1 : dropAreas[dropAreas.length-1].id+1
     let newDropArea = {
       startX: sx,
       startY: sy,
@@ -84,6 +84,10 @@ function App() {
     console.log(answerPairs)
   }
 
+  function setAnswerPairsPair(dragId, dropId) {
+    //TODO stuff
+  }
+
 
   return (
     <div className="App" style={{cursor: buttonHighlighting.createDragElement || buttonHighlighting.removeArea || buttonHighlighting.createDropArea ? "crosshair" : "default"}}>
@@ -103,6 +107,7 @@ function App() {
         addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
         clearButtonHighlight={() => {switchButtonHighlight("clear")}}
         dropAreas={dropAreas}
+        dragElements={dragElements}
         addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
         addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}

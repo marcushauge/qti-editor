@@ -2,10 +2,10 @@
 <assessmentItem xsi:schemaLocation="http://www.imsglobal.org/xsd/imsqti_v2p2 http://www.imsglobal.org/xsd/qti/qtiv2p2/imsqti_v2p2.xsd" identifier="103871416" title="Ny oppgave" adaptive="false" timeDependent="false" inspera:objectType="content_question_qti2_graphicgapmatch_v2" xmlns="http://www.imsglobal.org/xsd/imsqti_v2p2" xmlns:inspera="http://www.inspera.no/qti" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <responseDeclaration identifier="RESPONSE" cardinality="multiple" baseType="directedPair">
         <correctResponse>
-            <value>A1 GAP1</value>
+            <!-- <value>A1 GAP1</value> -->
         </correctResponse>
         <mapping defaultValue="0" lowerBound="0">
-            <mapEntry mapKey="A1 GAP1" mappedValue="1" />
+            <!-- <mapEntry mapKey="A1 GAP1" mappedValue="1" /> -->
         </mapping>
     </responseDeclaration>
     <outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">
@@ -44,10 +44,10 @@
         <p style="">Some question text</p>
         <graphicGapMatchInteraction responseIdentifier="RESPONSE" inspera:type="image" inspera:tokenSize="autoSize" inspera:gapSize="individualSize" inspera:tokenPosition="top" inspera:tokenOrder="random" inspera:reuseAlternatives="true">
             <object class="background" data="resources/graphicgapmatch_default_bg.jpg" type="" label="" width="" height="" inspera:orgWidth="" inspera:orgHeight="" inspera:logicalName="" inspera:objectType="content_image" />
-            <gapImg identifier="A1" matchMax="0" matchMin="0">
+            <!-- <gapImg identifier="A1" matchMax="0" matchMin="0">
                 <object data="resources/ID_103871406.png" type="image/png" objectLabel="" width="100" height="33" inspera:orgWidth="174" inspera:orgHeight="58" inspera:logicalName="content_item_1342515_103871405" inspera:objectType="content_image" />
             </gapImg>
-            <associableHotspot identifier="GAP1" matchMax="1" shape="rect" coords="10,10,129,45" />
+            <associableHotspot identifier="GAP1" matchMax="1" shape="rect" coords="10,10,129,45" /> -->
         </graphicGapMatchInteraction>
     </itemBody>
     <responseProcessing>
