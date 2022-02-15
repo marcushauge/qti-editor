@@ -125,14 +125,17 @@ function ImageViewer(props) {
 
                     }}>{props.pressedButton}</button>
                 </div>
-                <h4>Set drop area answer</h4>
-                <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
-                    //Change answer pair
-                    
-                    }}>
-                    {props.dragElements.map((dragElement) => <option key={dragElement.id} value={dragElement.id}>{"A"+dragElement.id}</option>)}
-                </select>
-                <button onClick={() => {console.log(props.pressedButton)}}>debug</button>
+                <div className="SetAnswerArea">
+                    <h4>Set drop area answer</h4>
+                    <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
+                        props.setAnswerPair(parseInt(e.target.value), selectedDropArea)
+                        }}>
+                        {props.dragElements.map((dragElement) => <option key={dragElement.id} value={dragElement.id}
+                        selected={Boolean(props.answerPairs.find(pair => pair.dragId === dragElement.id && pair.dropId === selectedDropArea))}
+                        >{"A"+dragElement.id}</option>)}
+                    </select>
+                    <button onClick={() => {console.log(props.pressedButton)}}>debug</button>
+                </div>
             </div>
         </div>
     )

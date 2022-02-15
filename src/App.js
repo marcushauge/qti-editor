@@ -5,7 +5,7 @@ import RemoveArea from './components/btnRemoveArea';
 import CreateDropArea from './components/btnCreateDropArea';
 import CreateDistractor from "./components/btnCreateDistractor";
 import ImageViewer from './components/imageViewer';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DragElementsArea from './components/dragElementsArea';
 import DragElement from './components/dragElement';
 import ExportQTI from './components/btnExportQTI';
@@ -21,6 +21,12 @@ function App() {
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false})
 
   const canvasRef = useRef(null)
+
+  useEffect(() => {
+    console.log("App.js new state:  ----------")
+    console.log("Answerpairs: ", answerPairs)
+    console.log("-----------------------")
+  })
 
   //For highlighting button and enabling marking feature
   function switchButtonHighlight(button) {
@@ -81,11 +87,19 @@ function App() {
   function addAnswerPair(dragId, dropId) {
     let newAnserPair = {dragId: dragId, dropId: dropId}
     setAnswerPairs(answerPairs => [...answerPairs, newAnserPair])
-    console.log(answerPairs)
   }
 
-  function setAnswerPairsPair(dragId, dropId) {
-    //TODO stuff
+  function setAnswerPair(dragId, dropId) {
+    //Find pair with this dropId
+    let pairs = [...answerPairs]
+    console.log(pairs)
+    for(let pair of pairs) {
+      if(pair.dropId === dropId) {
+        pair.dragId = dragId
+      }
+    }
+    setAnswerPairs(pairs)
+    console.log(pairs)
   }
 
 
@@ -113,6 +127,8 @@ function App() {
         addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
         pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
         erasedAreas={erasedAreas}
+        setAnswerPair={(dragId, dropId) => {setAnswerPair(dragId, dropId)}}
+        answerPairs={answerPairs}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
