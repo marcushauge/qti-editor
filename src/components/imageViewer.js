@@ -71,13 +71,13 @@ function ImageViewer(props) {
                 <div className="bgCanvasDiv">
                     <canvas ref={canvasRef} width="1200" height="1200" 
                     onMouseDown={(event) => {
-                        if(props.createDragElementPressed || props.removeAreaPressed) {
+                        if(props.pressedButton) {
                             startMouseX = getMousePos(event).x
                             startMouseY = getMousePos(event).y
                         }
                     }}
                     onMouseUp={(event) => {
-                        if(props.createDragElementPressed || props.removeAreaPressed) {
+                        if(props.pressedButton) {
                             stopMouseX = getMousePos(event).x
                             stopMouseY = getMousePos(event).y
                             createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
@@ -99,20 +99,25 @@ function ImageViewer(props) {
                     <h4>Preview snippet</h4>
                     <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]}
                     style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
-                    <button className="sidebtn" style={{visibility: props.createDragElementPressed || props.removeAreaPressed ? "visible" : "hidden"}} onClick={() => {
+                    <button className="sidebtn" style={{visibility: props.pressedButton ? "visible" : "hidden"}} onClick={() => {
                         if(!newDragElement) {
                             return
                         }
-
-                        if(props.createDragElementPressed) {
-                            //Create drag element and drop area
+                        //Do action depending on selected button
+                        if(props.pressedButton === "createDragElement") {
                             let dragId = props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
                             let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
                             console.log("drag and drop ids: " + dragId + ", " + dropId)
                             props.addAnswerPair(dragId, dropId)
                         }
-                        else if(props.removeAreaPressed) {
+                        else if(props.pressedButton === "removeArea") {
                             props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                        }
+                        else if(props.pressedButton === "createDropArea") {
+                            props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+                        }
+                        else if(props.pressedButton === "createDistractor") {
+                            props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
                         }
 
                         //Clear preview and new drag element state
@@ -128,8 +133,9 @@ function ImageViewer(props) {
                 <div className="SetAnswerArea">
                     <h4>Set drop area answer</h4>
                     <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
-                        props.setAnswerPair(parseInt(e.target.value), selectedDropArea)
+                        props.setAnswerPair(parseInt(e.target.value), selectedDropArea) //TODO: handle empty? for setting the GAP to have no answer?
                         }}>
+                        {!Boolean(props.answerPairs.find(pair => pair.dropId === selectedDropArea)) ? <option>empty</option> : null} 
                         {props.dragElements.map((dragElement) => <option key={dragElement.id} value={dragElement.id}
                         selected={Boolean(props.answerPairs.find(pair => pair.dragId === dragElement.id && pair.dropId === selectedDropArea))}
                         >{"A"+dragElement.id}</option>)}

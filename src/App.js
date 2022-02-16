@@ -18,7 +18,7 @@ function App() {
   const [erasedAreas, setErasedAreas] = useState([])
   const [answerPairs, setAnswerPairs] = useState([])
 
-  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false})
+  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false})
 
   const canvasRef = useRef(null)
 
@@ -104,14 +104,14 @@ function App() {
 
 
   return (
-    <div className="App" style={{cursor: buttonHighlighting.createDragElement || buttonHighlighting.removeArea || buttonHighlighting.createDropArea ? "crosshair" : "default"}}>
+    <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
         <CreateDragElement click={() => {switchButtonHighlight("createDragElement")}} clicked={buttonHighlighting.createDragElement}></CreateDragElement>
         <RemoveArea clicked={buttonHighlighting.removeArea} click={() => {switchButtonHighlight("removeArea")}}></RemoveArea>
         <CreateDropArea clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></CreateDropArea>
-        <CreateDistractor></CreateDistractor>
+        <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor>
         <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
