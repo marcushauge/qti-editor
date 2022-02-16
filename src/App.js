@@ -99,7 +99,6 @@ function App() {
       }
     }
     setAnswerPairs(pairs)
-    console.log(pairs)
   }
 
 

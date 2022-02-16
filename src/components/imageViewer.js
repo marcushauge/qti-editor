@@ -133,7 +133,13 @@ function ImageViewer(props) {
                 <div className="SetAnswerArea">
                     <h4>Set drop area answer</h4>
                     <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
-                        props.setAnswerPair(parseInt(e.target.value), selectedDropArea) //TODO: handle empty? for setting the GAP to have no answer?
+                        //Handle existing answer pair
+                        if(props.answerPairs.find(pair => pair.dropId === selectedDropArea)) {
+                            props.setAnswerPair(parseInt(e.target.value), selectedDropArea) //TODO: handle empty? for setting the GAP to have no answer?
+                        }
+                        else { //Handle when drop area does not already have an answer pair
+                            props.addAnswerPair(parseInt(e.target.value), selectedDropArea)
+                        }
                         }}>
                         {!Boolean(props.answerPairs.find(pair => pair.dropId === selectedDropArea)) ? <option>empty</option> : null} 
                         {props.dragElements.map((dragElement) => <option key={dragElement.id} value={dragElement.id}
