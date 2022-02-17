@@ -5,9 +5,6 @@ function UploadImage(props) {
     const onImageChange = (event) => {
         if (event.target.files && event.target.files[0]) {
           props.setBgImg(URL.createObjectURL(event.target.files[0]))
-          console.log("Upload setting bg image to this:-------")
-          console.log(URL.createObjectURL(event.target.files[0]))
-          console.log("Upload----------------------------------")
         }
        }
 

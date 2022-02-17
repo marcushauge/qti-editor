@@ -90,7 +90,7 @@ function ImageViewer(props) {
                 <div className="dropAreaDivs">
                     {props.dropAreas.map((dropArea) => <div className="dropAreaDiv" key={dropArea.id}
                     style={{left: dropArea.startX, top: dropArea.startY, width: dropArea.destinationX, height: dropArea.destinationY, 
-                    pointerEvents: props.pressedButton != undefined ? "none" : "auto"}}
+                    pointerEvents: props.pressedButton !== undefined ? "none" : "auto"}}
                     onClick={() => {setSelectedDropArea(dropArea.id)}}>{"GAP"+dropArea.id}</div>)}
                 </div>
             </div>
@@ -147,6 +147,9 @@ function ImageViewer(props) {
                         >{"A"+dragElement.id}</option>)}
                     </select>
                     <button onClick={() => {console.log(props.pressedButton)}}>debug</button>
+                </div>
+                <div className="SetMarkingSizeArea">
+                    <h4>Set marking size</h4>
                 </div>
             </div>
         </div>

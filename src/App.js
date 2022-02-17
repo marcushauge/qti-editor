@@ -1,14 +1,17 @@
 import './App.css';
 import UploadImage from "./components/btnUploadImage.js";
+import ImageViewer from './components/imageViewer';
+import React, { useEffect, useRef, useState } from 'react';
+import DragElementsArea from './components/dragElementsArea';
+import ExportQTI from './components/btnExportQTI';
+import EditButton from './components/btnEdit';
+
+//Old
+import DragElement from './components/dragElement';
 import CreateDragElement from './components/btnCreateDragElement';
 import RemoveArea from './components/btnRemoveArea';
 import CreateDropArea from './components/btnCreateDropArea';
 import CreateDistractor from "./components/btnCreateDistractor";
-import ImageViewer from './components/imageViewer';
-import React, { useEffect, useRef, useState } from 'react';
-import DragElementsArea from './components/dragElementsArea';
-import DragElement from './components/dragElement';
-import ExportQTI from './components/btnExportQTI';
 
 function App() {
 
@@ -107,10 +110,11 @@ function App() {
 
       <div className="Sidemenu">
         <UploadImage setBgImg={(img) => {setBgImg(img)}}></UploadImage>
-        <CreateDragElement click={() => {switchButtonHighlight("createDragElement")}} clicked={buttonHighlighting.createDragElement}></CreateDragElement>
-        <RemoveArea clicked={buttonHighlighting.removeArea} click={() => {switchButtonHighlight("removeArea")}}></RemoveArea>
-        <CreateDropArea clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></CreateDropArea>
-        <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor>
+        <EditButton name="Create drag element" click={() => {switchButtonHighlight("createDragElement")}} clicked={buttonHighlighting.createDragElement}></EditButton>
+        <EditButton name="Remove area" clicked={buttonHighlighting.removeArea} click={() => {switchButtonHighlight("removeArea")}}></EditButton>
+        <EditButton name="Create drop area" clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></EditButton>
+        {/* <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor> */}
+        <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
         <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
