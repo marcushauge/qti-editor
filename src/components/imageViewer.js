@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react"
 
 function ImageViewer(props) {
     const canvasRef = useRef(null)
-    const previewCanvasRef = useRef(null)
+    // const previewCanvasRef = useRef(null)
 
-    const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
-    const [newDragElement, setNewDragElement] = useState() //Preview element
-    const [newArea, setNewArea] = useState([0, 0, 0, 0])
+    // const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
+    // const [previewElement, setPreviewElement] = useState() //Preview element
+    // const [newArea, setNewArea] = useState([0, 0, 0, 0])
     const [selectedDropArea, setSelectedDropArea]  = useState(0)
 
     var startMouseX = 0
@@ -45,31 +45,62 @@ function ImageViewer(props) {
         };
     }
 
-      function createSnippetPreview(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-        setPreviewCanvasSize([dWidth, dHeight])
-        let ctx = previewCanvasRef.current.getContext("2d")
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        let imgSource = new Image()
-        
-        imgSource.onload = () => {
-          ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-          let newDragEl = {
-            src: previewCanvasRef.current.toDataURL(),
-            width: dWidth,
-            height: dHeight
-          }
-          setNewDragElement(newDragEl)
-          setNewArea([sx, sy, sWidth, sHeight])
-        }
-        imgSource.src = props.bgImg
-      }
+    // function createSnippetPreview(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+    //     setPreviewCanvasSize([dWidth, dHeight])
+    //     let ctx = previewCanvasRef.current.getContext("2d")
+    //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    //     let imgSource = new Image()
+
+    //     imgSource.onload = () => {
+    //         ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
+    //         let newDragEl = {
+    //             src: previewCanvasRef.current.toDataURL(),
+    //             width: dWidth,
+    //             height: dHeight
+    //         }
+    //         setPreviewElement(newDragEl)
+    //         setNewArea([sx, sy, sWidth, sHeight])
+    //     }
+    //     imgSource.src = props.bgImg
+    // }
+
+    // function performAction() {
+    //     if(!previewElement) {
+    //         return
+    //     }
+    //     //Do action depending on selected button
+    //     if(props.pressedButton === "createDragElement") {
+    //         let dragId = props.addDragElement(previewElement.src, previewElement.width, previewElement.height)
+    //         let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+    //         console.log("drag and drop ids: " + dragId + ", " + dropId)
+    //         props.addAnswerPair(dragId, dropId)
+    //     }
+    //     else if(props.pressedButton === "removeArea") {
+    //         props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])
+    //     }
+    //     else if(props.pressedButton === "createDropArea") {
+    //         props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
+    //     }
+    //     else if(props.pressedButton === "createDistractor") {
+    //         props.addDragElement(previewElement.src, previewElement.width, previewElement.height)
+    //     }
+    //     //Clear preview and new drag element state
+    //     setPreviewElement(null)
+    //     setPreviewCanvasSize([30, 15])
+    //     let ctx = previewCanvasRef.current.getContext("2d")
+    //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+    //     //Un-toggle button
+    //     props.clearButtonHighlight()
+    // }
+
+      
     
     return (
         //<img src={props.bgImg} alt="Image" width="600" height="600"></img>
         <div className="imageViewer">
             <div className="bgCanvasArea">
                 <div className="bgCanvasDiv">
-                    <canvas ref={canvasRef} width="1200" height="1200" 
+                    <canvas ref={canvasRef} width="1200" height="1200" title="bgCanvas"
                     onMouseDown={(event) => {
                         if(props.pressedButton) {
                             startMouseX = getMousePos(event).x
@@ -80,7 +111,8 @@ function ImageViewer(props) {
                         if(props.pressedButton) {
                             stopMouseX = getMousePos(event).x
                             stopMouseY = getMousePos(event).y
-                            createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
+                            // createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
+                            props.setSnippetDimensionsState(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                         }
                         setSelectedDropArea(0)
                     }}
@@ -91,45 +123,25 @@ function ImageViewer(props) {
                     {props.dropAreas.map((dropArea) => <div className="dropAreaDiv" key={dropArea.id}
                     style={{left: dropArea.startX, top: dropArea.startY, width: dropArea.destinationX, height: dropArea.destinationY, 
                     pointerEvents: props.pressedButton !== undefined ? "none" : "auto"}}
-                    onClick={() => {setSelectedDropArea(dropArea.id)}}>{"GAP"+dropArea.id}</div>)}
+                    onClick={() => {
+                        //setSelectedDropArea(dropArea.id)
+                        props.setSelectedDropArea(dropArea.id)
+                        }}>{"GAP"+dropArea.id}</div>)}
                 </div>
             </div>
+
+
+
+
+
             <div className="RightArea">
-                <div className="PreviewSnippetArea">
+                {/* <div className="PreviewSnippetArea">
                     <h4>Preview snippet</h4>
                     <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]}
                     style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
-                    <button className="sidebtn" style={{visibility: props.pressedButton ? "visible" : "hidden"}} onClick={() => {
-                        if(!newDragElement) {
-                            return
-                        }
-                        //Do action depending on selected button
-                        if(props.pressedButton === "createDragElement") {
-                            let dragId = props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
-                            let dropId = props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
-                            console.log("drag and drop ids: " + dragId + ", " + dropId)
-                            props.addAnswerPair(dragId, dropId)
-                        }
-                        else if(props.pressedButton === "removeArea") {
-                            props.addErasedArea(newArea[0], newArea[1], newArea[2], newArea[3])
-                        }
-                        else if(props.pressedButton === "createDropArea") {
-                            props.addDropArea(newArea[0], newArea[1], newArea[2], newArea[3])
-                        }
-                        else if(props.pressedButton === "createDistractor") {
-                            props.addDragElement(newDragElement.src, newDragElement.width, newDragElement.height)
-                        }
-
-                        //Clear preview and new drag element state
-                        setNewDragElement(null)
-                        setPreviewCanvasSize([30, 15])
-                        let ctx = previewCanvasRef.current.getContext("2d")
-                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                        //Un-toggle button
-                        props.clearButtonHighlight()
-
-                    }}>{props.pressedButton}</button>
-                </div>
+                    <button className="sidebtn" style={{visibility: props.pressedButton ? "visible" : "hidden"}} onClick={() => {performAction()}}
+                    >{props.pressedButton}</button>
+                </div> */}
                 <div className="SetAnswerArea">
                     <h4>Set drop area answer</h4>
                     <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {

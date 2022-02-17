@@ -12,6 +12,8 @@ import CreateDragElement from './components/btnCreateDragElement';
 import RemoveArea from './components/btnRemoveArea';
 import CreateDropArea from './components/btnCreateDropArea';
 import CreateDistractor from "./components/btnCreateDistractor";
+import PreviewSnippet from './components/previewSnippet';
+import SetAnswer from './components/setAnswer';
 
 function App() {
 
@@ -20,8 +22,9 @@ function App() {
   const [dropAreas, setDropAreas] = useState([])
   const [erasedAreas, setErasedAreas] = useState([])
   const [answerPairs, setAnswerPairs] = useState([])
-
+  const [snippetDimensions, setSnippetDimensions] = useState([0, 0, 0, 0, 0, 0, 0, 0])
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false})
+  const [selectedDropArea, setSelectedDropArea]  = useState(0)
 
   const canvasRef = useRef(null)
 
@@ -104,6 +107,10 @@ function App() {
     setAnswerPairs(pairs)
   }
 
+  function setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
+    setSnippetDimensions([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight])
+  }
+
 
   return (
     <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
@@ -119,22 +126,48 @@ function App() {
       </div>
 
       <div className="MainArea">
-        <ImageViewer bgImg={bgImg} createDragElementPressed={buttonHighlighting.createDragElement}
-        removeAreaPressed={buttonHighlighting.removeArea}
-        addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
+        <ImageViewer bgImg={bgImg}
+        // addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
         clearButtonHighlight={() => {switchButtonHighlight("clear")}}
         dropAreas={dropAreas}
         dragElements={dragElements}
-        addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
-        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
-        addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
+        // addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
+        // addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+        // addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
         pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
         erasedAreas={erasedAreas}
         setAnswerPair={(dragId, dropId) => {setAnswerPair(dragId, dropId)}}
         answerPairs={answerPairs}
+        setSnippetDimensionsState={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
+        setSelectedDropArea={(id) => {setSelectedDropArea(id)}}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
+      </div>
+
+      <div className="RightArea">
+        <PreviewSnippet
+        snippetDimensions={snippetDimensions}
+        bgImg={bgImg}
+        pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
+        clearButtonHighlight={() => {switchButtonHighlight("clear")}}
+        addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
+        addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
+        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+        addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
+        >
+        </PreviewSnippet>
+
+        <SetAnswer selectedDropArea={selectedDropArea}
+        setAnswerPair={(dragId, dropId) => {setAnswerPair(dragId, dropId)}}
+        answerPairs={answerPairs}
+        dragElements={dragElements}
+        ></SetAnswer>
+
+        <div className="SetMarkingSizeArea">
+          <h4>Set marking size</h4>
+        </div>
+
       </div>
 
     </div>
