@@ -16,7 +16,6 @@ function SetAnswer(props) {
                     selected={Boolean(props.answerPairs.find(pair => pair.dragId === dragElement.id && pair.dropId === props.selectedDropArea))}
                 >{"A" + dragElement.id}</option>)}
             </select>
-            <button onClick={() => { console.log(props.pressedButton) }}>debug</button>
         </div>
     )
 }

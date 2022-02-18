@@ -7,7 +7,7 @@ function ImageViewer(props) {
     // const [previewCanvasSize, setPreviewCanvasSize] = useState([30, 15])
     // const [previewElement, setPreviewElement] = useState() //Preview element
     // const [newArea, setNewArea] = useState([0, 0, 0, 0])
-    const [selectedDropArea, setSelectedDropArea]  = useState(0)
+    //const [selectedDropArea, setSelectedDropArea]  = useState(0)
 
     var startMouseX = 0
     var startMouseY = 0
@@ -114,7 +114,7 @@ function ImageViewer(props) {
                             // createSnippetPreview(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                             props.setSnippetDimensionsState(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                         }
-                        setSelectedDropArea(0)
+                        //setSelectedDropArea(0)
                     }}
                     >
                     </canvas>
