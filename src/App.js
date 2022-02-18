@@ -159,13 +159,14 @@ function App() {
         </PreviewSnippet>
 
         <SetAnswer selectedDropArea={selectedDropArea}
+        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         setAnswerPair={(dragId, dropId) => {setAnswerPair(dragId, dropId)}}
         answerPairs={answerPairs}
         dragElements={dragElements}
         ></SetAnswer>
 
         <div className="SetMarkingSizeArea">
-          <h4>Set marking size</h4>
+          <h4>TODO Set marking size</h4>
         </div>
 
       </div>

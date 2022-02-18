@@ -31,7 +31,6 @@ function PreviewSnippet(props) {
             }
             setPreviewElement(newDragEl)
             setNewArea([sx, sy, sWidth, sHeight])
-            console.log("createPreview called, img: ", props.bgImg)
         }
         imgSource.src = props.bgImg
 

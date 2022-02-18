@@ -132,16 +132,14 @@ function ImageViewer(props) {
 
 
 
-
-
-            <div className="RightArea">
-                {/* <div className="PreviewSnippetArea">
+            {/* <div className="RightArea">
+                <div className="PreviewSnippetArea">
                     <h4>Preview snippet</h4>
                     <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]}
                     style={{width: previewCanvasSize[0], height: previewCanvasSize[1]}}></canvas>
                     <button className="sidebtn" style={{visibility: props.pressedButton ? "visible" : "hidden"}} onClick={() => {performAction()}}
                     >{props.pressedButton}</button>
-                </div> */}
+                </div>
                 <div className="SetAnswerArea">
                     <h4>Set drop area answer</h4>
                     <select name="Drag element" disabled={selectedDropArea === 0} onChange={(e) => {
@@ -163,7 +161,7 @@ function ImageViewer(props) {
                 <div className="SetMarkingSizeArea">
                     <h4>Set marking size</h4>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }
