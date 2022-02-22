@@ -3,6 +3,7 @@
 function UploadImage(props) {
 
     const onImageChange = (event) => {
+        console.log("Upload onChange", event.target.files[0])
         if (event.target.files && event.target.files[0]) {
           props.setBgImg(URL.createObjectURL(event.target.files[0]))
         }

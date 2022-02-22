@@ -37,6 +37,8 @@
     ]
   },
   "devDependencies": {
+    "cypress": "^9.5.0",
+    "cypress-file-upload": "^5.0.8",
     "jest-canvas-mock": "^2.3.1"
   }
 }
