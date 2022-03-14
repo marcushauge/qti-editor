@@ -14,6 +14,7 @@ import CreateDropArea from './components/btnCreateDropArea';
 import CreateDistractor from "./components/btnCreateDistractor";
 import PreviewSnippet from './components/previewSnippet';
 import SetAnswer from './components/setAnswer';
+import GenerateWithOCR from './components/btnGenerateWithOCR';
 
 function App() {
 
@@ -25,6 +26,8 @@ function App() {
   const [snippetDimensions, setSnippetDimensions] = useState([0, 0, 0, 0, 0, 0, 0, 0])
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false})
   const [selectedDropArea, setSelectedDropArea]  = useState(0)
+  
+  const [testWordBbox, setTestWordBbox] = useState([])
 
   const canvasRef = useRef(null)
 
@@ -112,6 +115,19 @@ function App() {
   }
 
 
+  function testAddBbox(sx, sy, dx, dy) {
+    console.log("testaddbbox called: " , sx)
+    let bbox = {
+      startX: sx,
+      startY: sy,
+      destinationX: dx,
+      destinationY: dy,
+    }
+    setTestWordBbox(testWordBbox => [...testWordBbox, bbox])
+    console.log("bbox added: ", bbox)
+  }
+
+
   return (
     <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
 
@@ -122,6 +138,7 @@ function App() {
         <EditButton name="Create drop area" clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></EditButton>
         {/* <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor> */}
         <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
+        <GenerateWithOCR bgImg={bgImg} testAddBbox={(sx, sy, dx, dy) => {testAddBbox(sx, sy, dx, dy)}}></GenerateWithOCR>
         <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
@@ -140,6 +157,7 @@ function App() {
         answerPairs={answerPairs}
         setSnippetDimensionsState={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
         setSelectedDropArea={(id) => {setSelectedDropArea(id)}}
+        bboxes={testWordBbox}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
@@ -166,7 +184,7 @@ function App() {
         ></SetAnswer>
 
         <div className="SetMarkingSizeArea">
-          <h4>TODO Set marking size</h4>
+          {/* <h4>TODO Set marking size</h4> */}
         </div>
 
       </div>

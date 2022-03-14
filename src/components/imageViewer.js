@@ -34,6 +34,10 @@ function ImageViewer(props) {
             props.erasedAreas.forEach(a => {
                 ctx.clearRect(a.startX, a.startY, a.destinationX, a.destinationY)
             })
+            //Draw bboxes
+            props.bboxes.forEach(a => {
+                ctx.strokeRect(a.startX, a.startY, a.destinationX, a.destinationY)
+            })
         }
         img.src = props.bgImg
         console.log("imageviewer re-rendered")

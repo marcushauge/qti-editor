@@ -200,14 +200,14 @@ function ExportQTI(props) {
                 });
             }}>Export QTI</button>
 
-            <button className="sidebtn" onClick={async () => { //Print original file
+            {/* <button className="sidebtn" onClick={async () => { //Print original file
                 let i = await fetch(item)
                 let it = await i.text()
                 let parser = new DOMParser();
                 let xmlDoc = parser.parseFromString(it,"text/xml");
                 console.log("------------ORIGINAL-------------")
                 console.log(xmlDoc.getElementsByTagName("graphicGapMatchInteraction")[0])
-            }}>log original qti</button>
+            }}>log original qti</button> */}
 
             <canvas ref={hiddenCanvasRef} width="400" height="400"  style={{display: "none"}}></canvas>
 
