@@ -36,11 +36,10 @@ function ImageViewer(props) {
             })
             //Draw bboxes
             props.bboxes.forEach(a => {
-                ctx.strokeRect(a.startX, a.startY, a.destinationX, a.destinationY)
+                ctx.strokeRect(a.startX, a.startY, a.destinationX-a.startX, a.destinationY-a.startY)
             })
         }
         img.src = props.bgImg
-        console.log("imageviewer re-rendered")
     })
 
     function redrawWithMark(x, y, width, height) {

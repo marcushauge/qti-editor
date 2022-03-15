@@ -32,9 +32,9 @@ function App() {
   const canvasRef = useRef(null)
 
   useEffect(() => {
-    console.log("App.js new state:  ----------")
-    console.log("Answerpairs: ", answerPairs)
-    console.log("-----------------------")
+    // console.log("App.js new state:  ----------")
+    // console.log("Answerpairs: ", answerPairs)
+    // console.log("-----------------------")
   })
 
   //For highlighting button and enabling marking feature
