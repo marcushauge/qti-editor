@@ -54,8 +54,14 @@ function App() {
     setButtonHighlighting(newState)
   }
 
-  function addDragElement(imgSrc, width, height) {
-    let newId = (dragElements[dragElements.length-1] === undefined) ? 1 : dragElements[dragElements.length-1].id+1
+  function addDragElement(imgSrc, width, height, manualNewId) {
+    let newId = 0
+    if(manualNewId === undefined) {
+      newId = (dragElements[dragElements.length-1] === undefined) ? 1 : dragElements[dragElements.length-1].id+1
+    }
+    else {
+      newId = manualNewId
+    }
     let newDataId = (dragElements[dragElements.length-1] === undefined) ? 100000000 : dragElements[dragElements.length-1].dataId+1
     let newDragEl = {
       src: imgSrc,
@@ -65,11 +71,18 @@ function App() {
       dataId: newDataId
     }
     setDragElements(dragElements => [...dragElements, newDragEl])
+    console.log("Drag element added", newDragEl)
     return newId
   }
 
-  function addDropArea(sx, sy, dx, dy) {
-    let newId = (dropAreas[dropAreas.length-1] === undefined) ? 1 : dropAreas[dropAreas.length-1].id+1
+  function addDropArea(sx, sy, dx, dy, manualNewId) {
+    let newId = 0
+    if(manualNewId === undefined) {
+      newId = (dropAreas[dropAreas.length-1] === undefined) ? 1 : dropAreas[dropAreas.length-1].id+1
+    }
+    else {
+      newId = manualNewId
+    }
     let newDropArea = {
       startX: sx,
       startY: sy,
@@ -78,7 +91,7 @@ function App() {
       id: newId
     }
     setDropAreas(dropAreas => [...dropAreas, newDropArea])
-    console.log("Drop area added")
+    console.log("Drop area added", newDropArea)
     return newId
   }
 
@@ -138,7 +151,16 @@ function App() {
         <EditButton name="Create drop area" clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></EditButton>
         {/* <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor> */}
         <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
-        <GenerateWithOCR bgImg={bgImg} testAddBbox={(sx, sy, dx, dy) => {testAddBbox(sx, sy, dx, dy)}}></GenerateWithOCR>
+        <GenerateWithOCR
+        bgImg={bgImg} 
+        testAddBbox={(sx, sy, dx, dy) => {testAddBbox(sx, sy, dx, dy)}} 
+        addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
+        addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
+        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+        dropAreas={dropAreas}
+        dragElements={dragElements}
+        ></GenerateWithOCR>
+
         <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
