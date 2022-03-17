@@ -97,12 +97,28 @@ function ImageViewer(props) {
                     </canvas>
                     <div className="dropAreaDivs">
                         {props.dropAreas.map((dropArea) => <div className="dropAreaDiv" key={dropArea.id}
-                        style={{left: dropArea.startX, top: dropArea.startY, width: dropArea.destinationX, height: dropArea.destinationY, 
-                        pointerEvents: props.pressedButton !== undefined ? "none" : "auto"}}
-                        onClick={() => {
-                            //setSelectedDropArea(dropArea.id)
-                            props.setSelectedDropArea(dropArea.id)
+                            style={{
+                                left: dropArea.startX, top: dropArea.startY, width: dropArea.destinationX, height: dropArea.destinationY,
+                                pointerEvents: props.pressedButton !== undefined ? "none" : "auto"
+                            }}
+                            onClick={() => {
+                                //setSelectedDropArea(dropArea.id)
+                                props.setSelectedDropArea(dropArea.id)
                             }}>{dropArea.id}</div>)}
+                    </div>
+                    <div className="OCRAreaDivs">
+                            {props.ocrWords.map((word) => <div
+                            style={{
+                                left: word.x, top: word.y, width: word.width, height: word.height,
+                                pointerEvents: props.pressedButton !== undefined ? "none" : "auto",
+                                cursor: "pointer", position: "absolute"
+                            }}
+                            onClick={() => {
+                                console.log("Clicked on " + word.x + " " + word.y)
+                                let dragId = props.addDragElement(word.src, word.width, word.height)
+                                let dropId = props.addDropArea(word.x, word.y, word.width, word.height)
+                                props.addAnswerPair(dragId, dropId)
+                            }}></div>)}
                     </div>
                 </div>
                 

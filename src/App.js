@@ -17,8 +17,10 @@ function App() {
   const [erasedAreas, setErasedAreas] = useState([])
   const [answerPairs, setAnswerPairs] = useState([])
   const [snippetDimensions, setSnippetDimensions] = useState([0, 0, 0, 0, 0, 0, 0, 0])
-  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false})
+  const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false, createWord: false})
   const [selectedDropArea, setSelectedDropArea]  = useState(0)
+
+  const [ocrWords, setOcrWords] = useState([])
 
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function App() {
       dataId: newDataId
     }
     setDragElements(dragElements => [...dragElements, newDragEl])
-    console.log("Drag element added", newDragEl)
+    //console.log("Drag element added", newDragEl)
     return newId
   }
 
@@ -78,7 +80,7 @@ function App() {
       id: newId
     }
     setDropAreas(dropAreas => [...dropAreas, newDropArea])
-    console.log("Drop area added", newDropArea)
+    //console.log("Drop area added", newDropArea)
     return newId
   }
 
@@ -114,6 +116,17 @@ function App() {
     setSnippetDimensions([sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight])
   }
 
+  function addOcrWord(imgSrc, x, y, width, height) {
+    let newOcrWord = {
+      src: imgSrc,
+      x: x,
+      y: y,
+      width: width,
+      height: height
+    }
+    setOcrWords(ocrWords => [...ocrWords, newOcrWord])
+  }
+
 
   return (
     <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
@@ -125,26 +138,28 @@ function App() {
         <EditButton name="Create drop area" clicked={buttonHighlighting.createDropArea} click={() => {switchButtonHighlight("createDropArea")}}></EditButton>
         {/* <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor> */}
         <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
-        <GenerateWithOCR
+        <GenerateWithOCR name="Generate from colon"
         bgImg={bgImg} 
         addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
         addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
         addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         dropAreas={dropAreas}
         dragElements={dragElements}
+        addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
         ></GenerateWithOCR>
+        <EditButton name="Choose OCR words" clicked={buttonHighlighting.createWord} click={() => {switchButtonHighlight("createWord")}}></EditButton>
 
         <ExportQTI dropAreas={dropAreas} dragElements={dragElements} answerPairs={answerPairs} bgImg={bgImg} erasedAreas={erasedAreas}></ExportQTI>
       </div>
 
       <div className="MainArea">
         <ImageViewer bgImg={bgImg}
-        // addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
+        addDragElement={(imgSrc, width, height) => addDragElement(imgSrc, width, height)}
         clearButtonHighlight={() => {switchButtonHighlight("clear")}}
         dropAreas={dropAreas}
         dragElements={dragElements}
-        // addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
-        // addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+        addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
+        addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         // addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
         pressedButton={Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)}
         erasedAreas={erasedAreas}
@@ -152,6 +167,7 @@ function App() {
         answerPairs={answerPairs}
         setSnippetDimensionsState={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
         setSelectedDropArea={(id) => {setSelectedDropArea(id)}}
+        ocrWords={ocrWords}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>

@@ -5,7 +5,6 @@ import { createWorker } from 'tesseract.js';
 function GenerateWithOCR(props) {
 
     const fakeCanvasRef = useRef(null)
-
     const [fakeCanvasSize, setFakeCanvasSize] = useState([30, 15])
     
     async function generateText() { 
@@ -24,29 +23,44 @@ function GenerateWithOCR(props) {
                 const newestDragId = (props.dragElements[props.dragElements.length-1] === undefined) ? 0 : props.dragElements[props.dragElements.length-1].id
                 let dragIdCounter = newestDragId
                 console.log(words)
-                // words.forEach(word => {
-                //     dropIdCounter++
-                //     dragIdCounter++
-                //     setFakeCanvasSize([word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0])
-                //     let ctx = fakeCanvasRef.current.getContext("2d")
-                //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                //     ctx.drawImage(imgSource, word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, 0, 0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0)
-                //     let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dragIdCounter)
-                //     let dropId = props.addDropArea(word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dropIdCounter)
-                //     props.addAnswerPair(dragId, dropId)
-                // })
                 for(let i = 1; i < words.length; i++) {
-                    //If previous word ends with colon
+                    //If previous word ends with colon or IS a colon
                     if(words[i-1].text.charAt(words[i-1].text.length-1) === ":") {
                         dropIdCounter++
                         dragIdCounter++
-                        setFakeCanvasSize([words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0])
+
+                        //If inwanted character found, cut the element at that position
+                        //BOUNDING BOX COORDINATES APPEAR TO OFTEN OVERLAP, MAKING THIS NOT POSSIBLE
+                        let wordPixelsCut = 0
+                        // for(let j = 0; j < words[i].symbols.length; j++) {
+                        //     if(!words[i].symbols[j].text.match(/[a-z]/i)) {
+                        //         console.log("WORD " + dragIdCounter + ": " + words[i].text + " UNWANTED: ", words[i].symbols[j].text)
+                        //         console.log("BBOX wrong symbol: " + words[i].symbols[j].bbox.x0 + ", " + words[i].symbols[j].bbox.x1)
+                        //         console.log("BBOX symbol before: " + words[i].symbols[j-1].bbox.x0 + ", " + words[i].symbols[j-1].bbox.x1)
+                        //         console.log("BBOX word: " + words[i].bbox.x0 + ", " + words[i].bbox.x1)
+                        //         wordPixelsCut = words[i].symbols[j].bbox.x0 - words[i].symbols[j-1].bbox.x1
+                        //         break;
+                        //     }
+                        // }
+
+                        let wordWidth = words[i].bbox.x1-words[i].bbox.x0-wordPixelsCut
+                        let wordHeight = words[i].bbox.y1-words[i].bbox.y0
+                        setFakeCanvasSize([wordWidth, wordHeight])
                         let ctx = fakeCanvasRef.current.getContext("2d")
                         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                        ctx.drawImage(imgSource, words[i].bbox.x0, words[i].bbox.y0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, 0, 0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0)
-                        let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, dragIdCounter)
-                        let dropId = props.addDropArea(words[i].bbox.x0, words[i].bbox.y0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, dropIdCounter)
+                        ctx.drawImage(imgSource, words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight, 0, 0, wordWidth, wordHeight)
+                        let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), wordWidth, wordHeight, dragIdCounter)
+                        let dropId = props.addDropArea(words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight, dropIdCounter)
                         props.addAnswerPair(dragId, dropId)
+                    }
+                    else {
+                        let wordWidth = words[i].bbox.x1-words[i].bbox.x0
+                        let wordHeight = words[i].bbox.y1-words[i].bbox.y0
+                        setFakeCanvasSize([wordWidth, wordHeight])
+                        let ctx = fakeCanvasRef.current.getContext("2d")
+                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                        ctx.drawImage(imgSource, words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight, 0, 0, wordWidth, wordHeight)
+                        props.addOcrWord(fakeCanvasRef.current.toDataURL(), words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight)
                     }
                 }
             }
@@ -78,7 +92,7 @@ function GenerateWithOCR(props) {
 
     return (
         <div>
-            <button className="sidebtn" onClick={() => {generateText()}}>Generate With OCR</button>
+            <button className="sidebtn" onClick={() => {generateText()}}>{props.name}</button>
             <canvas ref={fakeCanvasRef} id="demo" width={fakeCanvasSize[0]} height={fakeCanvasSize[1]}
                     style={{ width: fakeCanvasSize[0], height: fakeCanvasSize[1], visibility: "hidden" }}
             ></canvas>
