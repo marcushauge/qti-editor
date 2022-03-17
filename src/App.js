@@ -5,13 +5,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import DragElementsArea from './components/dragElementsArea';
 import ExportQTI from './components/btnExportQTI';
 import EditButton from './components/btnEdit';
-
-//Old
-import DragElement from './components/dragElement';
-import CreateDragElement from './components/btnCreateDragElement';
-import RemoveArea from './components/btnRemoveArea';
-import CreateDropArea from './components/btnCreateDropArea';
-import CreateDistractor from "./components/btnCreateDistractor";
 import PreviewSnippet from './components/previewSnippet';
 import SetAnswer from './components/setAnswer';
 import GenerateWithOCR from './components/btnGenerateWithOCR';
@@ -26,15 +19,9 @@ function App() {
   const [snippetDimensions, setSnippetDimensions] = useState([0, 0, 0, 0, 0, 0, 0, 0])
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false})
   const [selectedDropArea, setSelectedDropArea]  = useState(0)
-  
-  const [testWordBbox, setTestWordBbox] = useState([])
 
-  const canvasRef = useRef(null)
 
   useEffect(() => {
-    // console.log("App.js new state:  ----------")
-    // console.log("Answerpairs: ", answerPairs)
-    // console.log("-----------------------")
   })
 
   //For highlighting button and enabling marking feature
@@ -128,19 +115,6 @@ function App() {
   }
 
 
-  function testAddBbox(sx, sy, dx, dy) {
-    console.log("testaddbbox called: " , sx)
-    let bbox = {
-      startX: sx,
-      startY: sy,
-      destinationX: dx,
-      destinationY: dy,
-    }
-    setTestWordBbox(testWordBbox => [...testWordBbox, bbox])
-    console.log("bbox added: ", bbox)
-  }
-
-
   return (
     <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
 
@@ -153,7 +127,6 @@ function App() {
         <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
         <GenerateWithOCR
         bgImg={bgImg} 
-        testAddBbox={(sx, sy, dx, dy) => {testAddBbox(sx, sy, dx, dy)}} 
         addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
         addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
         addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
@@ -179,7 +152,6 @@ function App() {
         answerPairs={answerPairs}
         setSnippetDimensionsState={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
         setSelectedDropArea={(id) => {setSelectedDropArea(id)}}
-        bboxes={testWordBbox}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements}></DragElementsArea>
