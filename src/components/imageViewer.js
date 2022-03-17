@@ -164,7 +164,7 @@ function ImageViewer(props) {
                     onClick={() => {
                         //setSelectedDropArea(dropArea.id)
                         props.setSelectedDropArea(dropArea.id)
-                        }}>{"GAP"+dropArea.id}</div>)}
+                        }}>{dropArea.id}</div>)}
                 </div>
             </div>
 

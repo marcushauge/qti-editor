@@ -17,32 +17,38 @@ function GenerateWithOCR(props) {
             'eng',
             { logger: m => console.log(m) }
           ).then(({ data: { words } }) => {
-            //console.log(words);
-            // createDragAndDrop(words[0].bbox.x0, words[0].bbox.y0, words[0].bbox.x1-words[0].bbox.x0, words[0].bbox.y1-words[0].bbox.y0, 0, 0, words[0].bbox.x1-words[0].bbox.x0, words[0].bbox.y1-words[0].bbox.y0)
-            // createDragAndDrop(words[1].bbox.x0, words[1].bbox.y0, words[1].bbox.x1-words[1].bbox.x0, words[1].bbox.y1-words[1].bbox.y0, 0, 0, words[1].bbox.x1-words[1].bbox.x0, words[1].bbox.y1-words[1].bbox.y0)
-
-            // words.forEach(word => {
-            //     // props.testAddBbox(word.bbox.x0, word.bbox.y0, word.bbox.x1, word.bbox.y1)
-            //     // console.log(word.bbox)
-            //     //createDragAndDrop(word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, 0, 0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0)
-            // })
             let imgSource = new Image()
             imgSource.onload = () => {
                 const newestDropId = (props.dropAreas[props.dropAreas.length-1] === undefined) ? 0 : props.dropAreas[props.dropAreas.length-1].id
                 let dropIdCounter = newestDropId
                 const newestDragId = (props.dragElements[props.dragElements.length-1] === undefined) ? 0 : props.dragElements[props.dragElements.length-1].id
-                let dragIdCounter = newestDropId
-                words.forEach(word => {
-                    dropIdCounter++
-                    dragIdCounter++
-                    setFakeCanvasSize([word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0])
-                    let ctx = fakeCanvasRef.current.getContext("2d")
-                    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-                    ctx.drawImage(imgSource, word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, 0, 0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0)
-                    let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dragIdCounter)
-                    let dropId = props.addDropArea(word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dropIdCounter)
-                    props.addAnswerPair(dragId, dropId)
-                })
+                let dragIdCounter = newestDragId
+                console.log(words)
+                // words.forEach(word => {
+                //     dropIdCounter++
+                //     dragIdCounter++
+                //     setFakeCanvasSize([word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0])
+                //     let ctx = fakeCanvasRef.current.getContext("2d")
+                //     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                //     ctx.drawImage(imgSource, word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, 0, 0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0)
+                //     let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dragIdCounter)
+                //     let dropId = props.addDropArea(word.bbox.x0, word.bbox.y0, word.bbox.x1-word.bbox.x0, word.bbox.y1-word.bbox.y0, dropIdCounter)
+                //     props.addAnswerPair(dragId, dropId)
+                // })
+                for(let i = 1; i < words.length; i++) {
+                    //If previous word ends with colon
+                    if(words[i-1].text.charAt(words[i-1].text.length-1) === ":") {
+                        dropIdCounter++
+                        dragIdCounter++
+                        setFakeCanvasSize([words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0])
+                        let ctx = fakeCanvasRef.current.getContext("2d")
+                        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+                        ctx.drawImage(imgSource, words[i].bbox.x0, words[i].bbox.y0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, 0, 0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0)
+                        let dragId = props.addDragElement(fakeCanvasRef.current.toDataURL(), words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, dragIdCounter)
+                        let dropId = props.addDropArea(words[i].bbox.x0, words[i].bbox.y0, words[i].bbox.x1-words[i].bbox.x0, words[i].bbox.y1-words[i].bbox.y0, dropIdCounter)
+                        props.addAnswerPair(dragId, dropId)
+                    }
+                }
             }
             imgSource.src = props.bgImg
           })
@@ -69,29 +75,6 @@ function GenerateWithOCR(props) {
         //   })();
     }
 
-    function createDragAndDrop(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
-        setFakeCanvasSize([dWidth, dHeight])
-        let ctx = fakeCanvasRef.current.getContext("2d")
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-        let imgSource = new Image()
-
-        imgSource.onload = () => {
-            ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-            ctx.drawImage(imgSource, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
-            let newDragEl = {
-                src: fakeCanvasRef.current.toDataURL(),
-                width: dWidth,
-                height: dHeight
-            }
-            //setPreviewElement(newDragEl)
-            let dragId = props.addDragElement(newDragEl.src, newDragEl.width, newDragEl.height)
-            //setNewArea([sx, sy, sWidth, sHeight])
-            let dropId = props.addDropArea(sx, sy, sWidth, sHeight)
-            console.log("drag and drop ids: " + dragId + ", " + dropId)
-            props.addAnswerPair(dragId, dropId)
-        }
-        imgSource.src = props.bgImg
-    }
 
     return (
         <div>
