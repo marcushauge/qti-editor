@@ -157,7 +157,7 @@ function GenerateWithOCR(props) {
         <div>
             <button className="sidebtn" onClick={() => {generateText()}}>{props.name}</button>
             <canvas ref={fakeCanvasRef} id="demo" width={fakeCanvasSize[0]} height={fakeCanvasSize[1]}
-                    style={{ width: fakeCanvasSize[0], height: fakeCanvasSize[1], visibility: "hidden" }}
+                    style={{ width: fakeCanvasSize[0], height: fakeCanvasSize[1], visibility: "hidden", display: "none" }}
             ></canvas>
         </div>
         

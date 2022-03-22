@@ -51,10 +51,31 @@
   padding: 15px;
 }
 
+.SidemenuOCR {
+  background-color: #0a90e9;
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column wrap; */
+  gap: 15px;
+  padding: 5px;
+}
+#SideP {
+  padding: 0px;
+  margin: 0px;
+  color:#FFFFFF
+}
+.SidemenuOCRButtons {
+  background-color: #0a90e9;
+  display: flex;
+  flex-direction: column;
+  /* flex-flow: column wrap; */
+  gap: 15px;
+}
+
 .sidebtn {
   background-color: #403F63;
   color: #FFFFFF;
-  height: 40px;
+  /* height: 40px; */
   min-width: 150px;
   max-width: 150px;
   display: block;
@@ -68,6 +89,9 @@
   align-content: center;
   line-height: 300%; /*Needed to center the text inside the label, to look like the buttons*/
   cursor: pointer;
+  line-height: normal;
+  padding-bottom: 10px;
+  padding-top: 10px;
 }
 .sidebtn:active {
   transform:translateY(2px)
