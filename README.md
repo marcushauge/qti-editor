@@ -78,6 +78,6 @@ Have Python 3.6 or newer.
 Create a `venv` folder in the backend folder.
 Activate it with `venv\Scripts\activate`.
 Install Flask with `pip install Flask`.
-Run server with(powershell): 
-> $env:FLASK_APP = "app"
+Run server with(powershell):  
+> $env:FLASK_APP = "app"  
 > flask run
