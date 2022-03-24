@@ -1,17 +1,32 @@
 from flask import Flask
+from flask import request
 import cv2
+from flask_cors import CORS
+import sys
+import numpy as np
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def hello_world():
-    return "<p>Hello, World!</p>"
+    return "Hello, cross-origin-world!"
 
 
-@app.route("/rectangles")
+@app.route("/rectangles", methods=['POST'])
 def detect_rectangles():
+    f = request.files.get("diagramFile", None)
+    if(not f):
+        return {"Msg:": "Wrong file"}
+    
+
+    # Make image as image..
+    fileImageData = np.asarray(bytearray(f.read()), dtype="uint8")
+    #fileImageData = bytearray(f.read())
+
     # Load iamge, grayscale, adaptive threshold
-    image = cv2.imread('d.jpg')
+    #image = cv2.imread(f)
+    image = cv2.imdecode(fileImageData, cv2.IMREAD_COLOR)
     result = image.copy()
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     thresh = cv2.adaptiveThreshold(gray,255,cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY_INV,51,9)
@@ -37,4 +52,4 @@ def detect_rectangles():
     cv2.imshow('opening', opening)
     cv2.imshow('image', image)
     cv2.waitKey()
-    return "<p>Hello!</p>"
+    return {"Msg:": "File uploaded!"}
