@@ -9,6 +9,7 @@ import PreviewSnippet from './components/previewSnippet';
 import SetAnswer from './components/setAnswer';
 import OCRDataTypes from './components/btnOCRDataTypes';
 import OCRSentences from './components/btnOCRSentences';
+import OCRSentencesInRectangles from './components/btnOCRSentencesInRectangles';
 
 function App() {
 
@@ -140,7 +141,7 @@ function App() {
         {/* <CreateDistractor clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></CreateDistractor> */}
         <EditButton name="Create distractor" clicked={buttonHighlighting.createDistractor} click={() => {switchButtonHighlight("createDistractor")}}></EditButton>
         <div className="SidemenuOCR">
-          <p id="SideP">OCR</p>
+          <p id="SideP">Auto detection</p>
           <div className="SidemenuOCRButtons">
             <OCRDataTypes name="Detect data types"
             bgImg={bgImg} 
@@ -160,25 +161,16 @@ function App() {
             dragElements={dragElements}
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
             ></OCRSentences>
+            <OCRSentencesInRectangles name="Detect attributes/functions in classes"
+            bgImg={bgImg} 
+            addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
+            addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
+            addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+            dropAreas={dropAreas}
+            dragElements={dragElements}
+            addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
+            ></OCRSentencesInRectangles>
 
-            <button onClick={ async () => {
-
-              let data={txt: "asd"}
-              const response = await fetch("http://127.0.0.1:5000/rectangles", {
-                method: 'POST', // *GET, POST, PUT, DELETE, etc.
-                mode: 'cors', // no-cors, *cors, same-origin
-                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-                credentials: 'same-origin', // include, *same-origin, omit
-                headers: {
-                  'Content-Type': 'application/json'
-                  // 'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                //body: JSON.stringify(data) // body data type must match "Content-Type" header
-              })
-              const content = await response.json()
-              console.log("response: ", content)
-
-            }}>Backend</button>
             {/* <EditButton name="Choose OCR words" clicked={buttonHighlighting.createWord} click={() => {switchButtonHighlight("createWord")}}></EditButton> */}
           </div>
         </div>

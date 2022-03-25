@@ -11,24 +11,6 @@ function OCRSentences(props) {
         //Need to create a copy of the image from the props.bgImg URL as tesseract appears to delete or change it.
         let file = await fetch(props.bgImg).then(r => r.blob()).then(blobFile => new File([blobFile], "diagramFile", { type: "image/png" }))
 
-        //Find rectangle(classes) positions
-        var formData = new FormData();
-        formData.append("diagramFile", file)
-        const response = await fetch("http://127.0.0.1:5000/rectangles", {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
-        // mode: 'cors', // no-cors, *cors, same-origin
-        // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-        // credentials: 'same-origin', // include, *same-origin, omit
-        // headers: {
-        //     "Content-Type": "multipart/form-data"
-        //     //'Content-Type': 'application/json'
-        //     //'Content-Type': 'application/x-www-form-urlencoded',
-        // },
-        body: formData // body data type must match "Content-Type" header
-        })
-        const content = await response.json()
-        console.log("response: ", content)
-
         Tesseract.recognize(
             file,
             'eng',

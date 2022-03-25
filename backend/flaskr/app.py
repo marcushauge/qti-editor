@@ -4,6 +4,7 @@ import cv2
 from flask_cors import CORS
 import sys
 import numpy as np
+from flask import jsonify
 
 app = Flask(__name__)
 CORS(app)
@@ -44,12 +45,14 @@ def detect_rectangles():
     # Draw rectangles
     cnts = cv2.findContours(opening, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
+    response = []
     for c in cnts:
         x,y,w,h = cv2.boundingRect(c)
+        response.append({"x": x, "y": y, "width": w, "height": h})
         cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 3)
 
     cv2.imshow('thresh', thresh)
     cv2.imshow('opening', opening)
     cv2.imshow('image', image)
-    cv2.waitKey()
-    return {"Msg:": "File uploaded!"}
+    #cv2.waitKey()
+    return jsonify(response)
