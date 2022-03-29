@@ -10,6 +10,7 @@ import SetAnswer from './components/setAnswer';
 import OCRDataTypes from './components/btnOCRDataTypes';
 import OCRSentences from './components/btnOCRSentences';
 import OCRSentencesInRectangles from './components/btnOCRSentencesInRectangles';
+import DragAndDropRectangles from './components/btnDragAndDropRectangles';
 
 function App() {
 
@@ -171,6 +172,15 @@ function App() {
             dragElements={dragElements}
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
             ></OCRSentencesInRectangles>
+            <DragAndDropRectangles name="Make classes drag-and-drop"
+            bgImg={bgImg} 
+            addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
+            addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
+            addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+            dropAreas={dropAreas}
+            dragElements={dragElements}
+            addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}>
+            </DragAndDropRectangles>
 
             {/* <EditButton name="Choose OCR words" clicked={buttonHighlighting.createWord} click={() => {switchButtonHighlight("createWord")}}></EditButton> */}
           </div>
