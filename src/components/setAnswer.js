@@ -1,7 +1,7 @@
 function SetAnswer(props) {
     return (
         <div className="SetAnswerArea">
-            <h4>Set drop area answer</h4>
+            <p>Set drop area answer</p>
             <select name="Drag element" disabled={props.selectedDropArea === 0} onChange={(e) => {
                 //Handle existing answer pair
                 if (props.answerPairs.find(pair => pair.dropId === props.selectedDropArea)) {

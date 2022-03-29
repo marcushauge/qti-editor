@@ -68,7 +68,7 @@ function PreviewSnippet(props) {
     return(
         <div>
             <div className="PreviewSnippetArea">
-                <h4>Preview snippet</h4>
+                <p>Preview snippet</p>
                 <canvas ref={previewCanvasRef} id="demo" width={previewCanvasSize[0]} height={previewCanvasSize[1]}
                     style={{ width: previewCanvasSize[0], height: previewCanvasSize[1] }}></canvas>
                 <button className="sidebtn" style={{ visibility: props.pressedButton ? "visible" : "hidden" }} onClick={() => { performAction() }}

@@ -21,6 +21,7 @@ function App() {
   const [snippetDimensions, setSnippetDimensions] = useState([0, 0, 0, 0, 0, 0, 0, 0])
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false, createWord: false})
   const [selectedDropArea, setSelectedDropArea]  = useState(0)
+  const [selectedDragElement, setSelectedDragElement]  = useState(0)
 
   const [ocrWords, setOcrWords] = useState([])
 
@@ -98,17 +99,17 @@ function App() {
   }
 
   function addAnswerPair(dragId, dropId) {
-    let newAnserPair = {dragId: dragId, dropId: dropId}
-    setAnswerPairs(answerPairs => [...answerPairs, newAnserPair])
+    let newAnswerPair = {dragId: dragId, dropId: dropId}
+    setAnswerPairs(answerPairs => [...answerPairs, newAnswerPair])
   }
 
-  function setAnswerPair(dragId, dropId) {
+  function setAnswerPair(newDragId, dropId) { //Set a drop area's answer to a new answer
     //Find pair with this dropId
     let pairs = [...answerPairs]
     console.log(pairs)
     for(let pair of pairs) {
       if(pair.dropId === dropId) {
-        pair.dragId = dragId
+        pair.dragId = newDragId
       }
     }
     setAnswerPairs(pairs)
@@ -192,11 +193,16 @@ function App() {
         setAnswerPair={(dragId, dropId) => {setAnswerPair(dragId, dropId)}}
         answerPairs={answerPairs}
         setSnippetDimensionsState={(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) => {setSnippetDimensionsState(sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)}}
-        setSelectedDropArea={(id) => {setSelectedDropArea(id)}}
+        setSelectedDropArea={(id) => {
+          setSelectedDropArea(id)
+          setSelectedDragElement(0)}}
         ocrWords={ocrWords}
         ></ImageViewer>
 
-        <DragElementsArea dragElements={dragElements}></DragElementsArea>
+        <DragElementsArea dragElements={dragElements} setSelectedDragElement={(id) => {
+          setSelectedDragElement(id)
+          setSelectedDropArea(0)}}>
+        </DragElementsArea>
       </div>
 
       <div className="RightArea">
@@ -218,6 +224,34 @@ function App() {
         answerPairs={answerPairs}
         dragElements={dragElements}
         ></SetAnswer>
+
+        <button className="sidebtn" style={{marginTop: "10px", visibility: selectedDropArea !==0 ? "visible" : "hidden"}} onClick={() => {
+          //Remove the drop area
+          let dropId = selectedDropArea
+          setDropAreas(dropAreas.filter(dropArea => dropArea.id !== dropId))
+          //Remove all answer pairs with this gap ID
+          setAnswerPairs(answerPairs.filter(pair => pair.dropId !== dropId))
+          //Reset selectedDropArea state
+          setSelectedDropArea(0)
+        }}>Remove drop area</button>
+
+
+        <button className="sidebtn" style={{marginTop: "10px", visibility: selectedDragElement !==0 ? "visible" : "hidden"}} onClick={() => {
+          setDragElements(dragElements.filter(element => element.id !== selectedDragElement))
+          setSelectedDragElement(0)
+        }}>Remove drag element</button>
+
+
+
+
+
+
+        <button onClick={() => {
+          console.log("Drop areas: ", dropAreas)
+          console.log("Drag elements: ", dragElements)
+          console.log("Answer pairs: ", answerPairs)
+        }}>React state</button>
+        
 
         <div className="SetMarkingSizeArea">
           {/* <h4>TODO Set marking size</h4> */}
