@@ -23,8 +23,9 @@ function App() {
   const [buttonHighlighting, setButtonHighlighting] = useState({createDragElement: false, removeArea: false, createDropArea: false, createDistractor: false, createWord: false})
   const [selectedDropArea, setSelectedDropArea]  = useState(0)
   const [selectedDragElement, setSelectedDragElement]  = useState(0)
-
   const [ocrWords, setOcrWords] = useState([])
+
+  const [markSize, setMarkSize] = useState([100, 30, false]) //Last element is fixed marking enabled/disabled
 
 
   useEffect(() => {
@@ -207,6 +208,7 @@ function App() {
           setSelectedDropArea(id)
           setSelectedDragElement(0)}}
         ocrWords={ocrWords}
+        markSize={markSize}
         ></ImageViewer>
 
         <DragElementsArea dragElements={dragElements} setSelectedDragElement={(id) => {
@@ -225,8 +227,7 @@ function App() {
         addDropArea={(sx, sy, dx, dy) => addDropArea(sx, sy, dx, dy)}
         addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
         addErasedArea={(sx, sy, dx, dy) => {addErasedArea(sx, sy, dx, dy)}}
-        >
-        </PreviewSnippet>
+        ></PreviewSnippet>
 
         <SetAnswer selectedDropArea={selectedDropArea}
         addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
@@ -234,6 +235,21 @@ function App() {
         answerPairs={answerPairs}
         dragElements={dragElements}
         ></SetAnswer>
+
+        <div className="SetMarkingSizeArea">
+          <p>Set fixed marking size</p>
+          <label for="fixedMark">Enabled: </label>
+          <input id="fixedMark" type="checkbox" onChange={event => {setMarkSize([markSize[0], markSize[1], !markSize[2],])}}></input><br/>
+          <label for="markingWidth">Width: </label>
+          <input type="number" id="markingWidth" style={{width: "40px"}} max="300" onChange={event => {
+            setMarkSize([event.target.value, markSize[1], markSize[2]])}} value={markSize[0]}></input><br></br>
+          <label for="markingHeight">Height: </label>
+          <input type="number" id="markingHeight" style={{width: "40px"}}max="300" onChange={event => {
+            setMarkSize([markSize[0], event.target.value, markSize[2]])}} value={markSize[1]}></input><br></br>
+          <canvas width={markSize[0] && markSize[0]>-1 ? markSize[0] : 0} height={markSize[1] && markSize[1]>-1 ? markSize[1] : 0}
+            style={{borderStyle: "dashed", borderWidth: "1px"}}>
+          </canvas>
+        </div>
 
         <button className="sidebtn" style={{marginTop: "10px", visibility: selectedDropArea !==0 ? "visible" : "hidden"}} onClick={() => {
           //Remove the drop area
@@ -261,11 +277,6 @@ function App() {
           console.log("Drag elements: ", dragElements)
           console.log("Answer pairs: ", answerPairs)
         }}>React state</button>
-        
-
-        <div className="SetMarkingSizeArea">
-          {/* <h4>TODO Set marking size</h4> */}
-        </div>
 
       </div>
 
