@@ -87,6 +87,10 @@ function ImageViewer(props) {
                             startMouseY = getMousePos(event).y
                             stopMouseX = startMouseX+props.markSize[0]
                             stopMouseY = startMouseY+props.markSize[1]
+                            console.log("Setting snippetDimensionState in imageviewer: ")
+                            console.log("props mark sizes: ", props.markSize)
+                            console.log(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
+                            console.log(stopMouseX, stopMouseY)
                             setFixedMark([startMouseX, startMouseY])
                             props.setSnippetDimensionsState(startMouseX, startMouseY, stopMouseX-startMouseX, stopMouseY-startMouseY, 0, 0, stopMouseX-startMouseX, stopMouseY-startMouseY)
                         }

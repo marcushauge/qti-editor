@@ -242,10 +242,10 @@ function App() {
           <input id="fixedMark" type="checkbox" onChange={event => {setMarkSize([markSize[0], markSize[1], !markSize[2],])}}></input><br/>
           <label for="markingWidth">Width: </label>
           <input type="number" id="markingWidth" style={{width: "40px"}} max="300" onChange={event => {
-            setMarkSize([event.target.value, markSize[1], markSize[2]])}} value={markSize[0]}></input><br></br>
+            setMarkSize([parseInt(event.target.value), markSize[1], markSize[2]])}} value={markSize[0]}></input><br></br>
           <label for="markingHeight">Height: </label>
           <input type="number" id="markingHeight" style={{width: "40px"}}max="300" onChange={event => {
-            setMarkSize([markSize[0], event.target.value, markSize[2]])}} value={markSize[1]}></input><br></br>
+            setMarkSize([markSize[0], parseInt(event.target.value), markSize[2]])}} value={markSize[1]}></input><br></br>
           <canvas width={markSize[0] && markSize[0]>-1 ? markSize[0] : 0} height={markSize[1] && markSize[1]>-1 ? markSize[1] : 0}
             style={{borderStyle: "dashed", borderWidth: "1px"}}>
           </canvas>
