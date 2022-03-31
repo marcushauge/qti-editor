@@ -177,17 +177,24 @@ input[type="file"] {
   border-style:groove;
   border-color: #ed474a81;
   align-self: center;
-  background-color: #ED474A;
+  /* background-color: #ED474A; */
   margin: 10px;
 }
 
 .SetAnswerArea {
   display: flex;
   flex-direction: column;
-  background-color: #ED474A;
+  /* background-color: #ED474A; */
   color: #FFFFFF;
-  padding: 10px;
+  padding-bottom: 10px;
   align-items: center;
   border-bottom-style: solid;
   border-width: 1px;
+}
+
+.SetMarkingSizeArea {
+  border-bottom-style: solid;
+  border-width: 1px;
+  color: #FFFFFF;
+  padding-bottom: 10px;
 }

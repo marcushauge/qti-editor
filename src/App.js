@@ -27,6 +27,8 @@ function App() {
 
   const [markSize, setMarkSize] = useState([100, 30, false]) //Last element is fixed marking enabled/disabled
 
+  const [completedAutoTasks, setCompletedAutoTasks] = useState([]) //Array of done tasks like detect data types button
+
 
   useEffect(() => {
   })
@@ -154,6 +156,8 @@ function App() {
             dropAreas={dropAreas}
             dragElements={dragElements}
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
+            completedAutoTasks={completedAutoTasks}
+            addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRDataTypes>
             <OCRSentences name="Detect attributes/functions"
             bgImg={bgImg} 
@@ -163,6 +167,8 @@ function App() {
             dropAreas={dropAreas}
             dragElements={dragElements}
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
+            completedAutoTasks={completedAutoTasks}
+            addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRSentences>
             <OCRSentencesInRectangles name="Detect attributes/functions in classes"
             bgImg={bgImg} 
@@ -172,6 +178,8 @@ function App() {
             dropAreas={dropAreas}
             dragElements={dragElements}
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
+            completedAutoTasks={completedAutoTasks}
+            addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRSentencesInRectangles>
             <DragAndDropRectangles name="Make classes drag-and-drop"
             bgImg={bgImg} 
@@ -264,6 +272,8 @@ function App() {
 
         <button className="sidebtn" style={{marginTop: "10px", visibility: selectedDragElement !==0 ? "visible" : "hidden"}} onClick={() => {
           setDragElements(dragElements.filter(element => element.id !== selectedDragElement))
+          //Set the drop area with this drag element as answer answer's to something? A1? Removing the pair(s) for now.
+          setAnswerPairs(answerPairs.filter(pair => pair.dragId !== selectedDragElement))
           setSelectedDragElement(0)
         }}>Remove drag element</button>
 

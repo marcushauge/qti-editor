@@ -112,7 +112,14 @@ function OCRSentences(props) {
 
     return (
         <div>
-            <button className="sidebtn" onClick={() => {generateText()}}>{props.name}</button>
+            <button className="sidebtn" onClick={() => {
+                generateText()
+                props.addCompletedAutoTask("OCRSentences")
+                props.addCompletedAutoTask("OCRDataTypes")
+            }}
+                disabled={props.completedAutoTasks.includes("OCRSentences")}
+                style={{ textDecoration: props.completedAutoTasks.includes("OCRSentences") ? "line-through" : "" }}
+            >{props.name}</button>
             <canvas ref={fakeCanvasRef} id="demo" width={fakeCanvasSize[0]} height={fakeCanvasSize[1]}
                     style={{ width: fakeCanvasSize[0], height: fakeCanvasSize[1], visibility: "hidden", display: "none" }}
             ></canvas>

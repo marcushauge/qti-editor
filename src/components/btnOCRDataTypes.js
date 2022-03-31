@@ -80,7 +80,13 @@ function OCRDataTypes(props) {
 
     return (
         <div>
-            <button className="sidebtn" onClick={() => {generateText()}}>{props.name}</button>
+            <button className="sidebtn" onClick={() => {
+                generateText()
+                props.addCompletedAutoTask("OCRDataTypes")
+                props.addCompletedAutoTask("OCRSentences")
+            }} disabled={props.completedAutoTasks.includes("OCRDataTypes")}
+                style={{ textDecoration: props.completedAutoTasks.includes("OCRDataTypes") ? "line-through" : "" }}
+            >{props.name}</button>
             <canvas ref={fakeCanvasRef} id="demo" width={fakeCanvasSize[0]} height={fakeCanvasSize[1]}
                     style={{ width: fakeCanvasSize[0], height: fakeCanvasSize[1], visibility: "hidden", display: "none" }}
             ></canvas>

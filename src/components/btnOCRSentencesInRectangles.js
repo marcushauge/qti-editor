@@ -81,7 +81,14 @@ function OCRSentencesInRectangles(props) {
 
     return (
         <div>
-            <button className="sidebtn" onClick={() => {generateText()}}>{props.name}</button>
+            <button className="sidebtn" onClick={() => {
+                generateText()
+                props.addCompletedAutoTask("OCRDataTypes")
+                props.addCompletedAutoTask("OCRSentences")
+            }}
+                disabled={props.completedAutoTasks.includes("OCRSentences")}
+                style={{ textDecoration: props.completedAutoTasks.includes("OCRSentences") ? "line-through" : "" }}
+            >{props.name}</button>
         </div>
         
     )
