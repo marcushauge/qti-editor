@@ -3,10 +3,10 @@ function DragElementsArea(props) {
         <div className="DragElementsArea">
           {props.dragElements.map((element, index) =>{
             return (
-              <div key={element.id}>{"A"+element.id}
-                <img src={element.src} width={element.width} height={element.height} style={{borderStyle: "dashed", borderWidth: "1px", cursor: "pointer"}} onClick={() => {
-                  props.setSelectedDragElement(element.id)
-                }} alt="Err"></img>
+              <div key={element.id} style={{cursor: "pointer"}} onClick={() => {
+                props.setSelectedDragElement(element.id)
+              }}>{"A"+element.id} 
+                <img src={element.src} width={element.width} height={element.height} style={{borderStyle: "dashed", borderWidth: "1px"}} alt="Err"></img>
               </div>
             )
           })}

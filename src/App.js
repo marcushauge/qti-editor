@@ -250,10 +250,18 @@ function App() {
           <input id="fixedMark" type="checkbox" onChange={event => {setMarkSize([markSize[0], markSize[1], !markSize[2],])}}></input><br/>
           <label for="markingWidth">Width: </label>
           <input type="number" id="markingWidth" style={{width: "40px"}} max="300" onChange={event => {
-            setMarkSize([parseInt(event.target.value), markSize[1], markSize[2]])}} value={markSize[0]}></input><br></br>
+            if(parseInt(event.target.value) < 400) {
+              setMarkSize([parseInt(event.target.value), markSize[1], markSize[2]])}
+            }
+          }
+          value={markSize[0]}></input><br></br>
           <label for="markingHeight">Height: </label>
           <input type="number" id="markingHeight" style={{width: "40px"}}max="300" onChange={event => {
-            setMarkSize([markSize[0], parseInt(event.target.value), markSize[2]])}} value={markSize[1]}></input><br></br>
+            if(parseInt(event.target.value) < 400) {
+              setMarkSize([markSize[0], parseInt(event.target.value), markSize[2]])}
+            }
+          } 
+          value={markSize[1]}></input><br></br>
           <canvas width={markSize[0] && markSize[0]>-1 ? markSize[0] : 0} height={markSize[1] && markSize[1]>-1 ? markSize[1] : 0}
             style={{borderStyle: "dashed", borderWidth: "1px"}}>
           </canvas>
@@ -279,15 +287,20 @@ function App() {
 
 
 
-
-
-
+    {/*FOR TESTING PURPOSES */}
         <button onClick={() => {
           console.log("Drop areas: ", dropAreas)
           console.log("Drag elements: ", dragElements)
           console.log("Answer pairs: ", answerPairs)
         }}>React state</button>
 
+      </div>
+      <div className="answerPairs" style={{display: "none"}}>
+        {answerPairs.map((pair, index) => {
+          return (
+            <div key={index} className="pair">{pair.dropId + "," + pair.dragId}</div>
+          )
+        })}
       </div>
 
     </div>

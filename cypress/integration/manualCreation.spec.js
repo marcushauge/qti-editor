@@ -2,7 +2,7 @@
 /* eslint-disable jest/valid-expect */
 import 'cypress-file-upload';
 
-describe('Go through app', () => {
+describe('Manual features', () => {
     it('Uploads bg image and creates two drag elements with corresponding drop areas', () => {
         cy.visit('http://localhost:3000/')
         
@@ -69,6 +69,20 @@ describe('Go through app', () => {
         cy.contains("GAP1").click()
         cy.contains("GAP2").click()
         cy.get("select option:selected").should("have.text", "A1")
+    })
+
+    it("Creates drag-and-drop with fixed sizes", () => {
+        cy.contains("Enabled").click()
+
+        cy.get('[type="number"]').first().invoke('val', '').type(70)
+        cy.get('[type="number"]').last().invoke('val', '').type(20)
+
+        cy.contains("Create drag element").click()
+        cy.get('[title="bgCanvas"]').trigger("mousedown", 150, 25)
+        cy.get(".PreviewSnippetArea").find("button").click()
+
+        cy.contains("GAP4").invoke('width').should('eq', 70)
+        cy.contains("GAP4").invoke('height').should('eq', 20)
     })
 
 })

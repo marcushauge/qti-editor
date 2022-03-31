@@ -122,7 +122,7 @@ function ImageViewer(props) {
                             onClick={() => {
                                 //setSelectedDropArea(dropArea.id)
                                 props.setSelectedDropArea(dropArea.id)
-                            }}>{dropArea.id}</div>)}
+                            }}>GAP{dropArea.id}</div>)}
                     </div>
                     <div className="OCRAreaDivs">
                             {props.ocrWords.map((word) => <div
