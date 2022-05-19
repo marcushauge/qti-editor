@@ -11,6 +11,7 @@ import OCRDataTypes from './components/btnOCRDataTypes';
 import OCRSentences from './components/btnOCRSentences';
 import OCRSentencesInRectangles from './components/btnOCRSentencesInRectangles';
 import DragAndDropRectangles from './components/btnDragAndDropRectangles';
+import OCRAllWords from './components/btnOCRAllWords';
 
 function App() {
 
@@ -200,7 +201,17 @@ function App() {
             addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}>
             </DragAndDropRectangles>
 
-            {/* <EditButton name="Choose OCR words" clicked={buttonHighlighting.createWord} click={() => {switchButtonHighlight("createWord")}}></EditButton> */}
+            <OCRAllWords name="Detect and select all words" showLoader={showLoader} hideLoader={hideLoader}
+            bgImg={bgImg} 
+            addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
+            addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
+            addAnswerPair={(dragId, dropId) => {addAnswerPair(dragId, dropId)}}
+            dropAreas={dropAreas}
+            dragElements={dragElements}
+            addOcrWord={(imgSrc, x, y, width, height) => addOcrWord(imgSrc, x, y, width, height)}
+            completedAutoTasks={completedAutoTasks}
+            addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
+            ></OCRAllWords>
           </div>
         </div>
 
