@@ -29,6 +29,8 @@ function App() {
 
   const [completedAutoTasks, setCompletedAutoTasks] = useState([]) //Array of done tasks like detect data types button
 
+  const [loaderVisibility, setLoaderVisibility] = useState("none")
+
 
   useEffect(() => {
   })
@@ -134,6 +136,13 @@ function App() {
     setOcrWords(ocrWords => [...ocrWords, newOcrWord])
   }
 
+  function showLoader() {
+    setLoaderVisibility("block")
+  }
+  function hideLoader() {
+    setLoaderVisibility("none")
+  }
+
 
   return (
     <div className="App" style={{cursor: (Object.keys(buttonHighlighting).find((i) => buttonHighlighting[i] === true)) ? "crosshair" : "default"}}>
@@ -148,7 +157,7 @@ function App() {
         <div className="SidemenuOCR">
           <p id="SideP">Auto detection</p>
           <div className="SidemenuOCRButtons">
-            <OCRDataTypes name="Detect data types"
+            <OCRDataTypes name="Detect data types" showLoader={showLoader} hideLoader={hideLoader}
             bgImg={bgImg} 
             addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
             addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
@@ -159,7 +168,7 @@ function App() {
             completedAutoTasks={completedAutoTasks}
             addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRDataTypes>
-            <OCRSentences name="Detect attributes/functions"
+            <OCRSentences name="Detect class members" showLoader={showLoader} hideLoader={hideLoader}
             bgImg={bgImg} 
             addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
             addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
@@ -170,7 +179,7 @@ function App() {
             completedAutoTasks={completedAutoTasks}
             addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRSentences>
-            <OCRSentencesInRectangles name="Detect attributes/functions in classes"
+            <OCRSentencesInRectangles name="Detect class members inside class boxes" showLoader={showLoader} hideLoader={hideLoader}
             bgImg={bgImg} 
             addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
             addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
@@ -181,7 +190,7 @@ function App() {
             completedAutoTasks={completedAutoTasks}
             addCompletedAutoTask={(task) => {setCompletedAutoTasks(completedAutoTasks => [...completedAutoTasks, task])}}
             ></OCRSentencesInRectangles>
-            <DragAndDropRectangles name="Make classes drag-and-drop"
+            <DragAndDropRectangles name="Make classes into drag-and-drop"
             bgImg={bgImg} 
             addDragElement={(imgSrc, width, height, manualNewId) => addDragElement(imgSrc, width, height, manualNewId)}
             addDropArea={(sx, sy, dx, dy, manualNewId) => addDropArea(sx, sy, dx, dy, manualNewId)}
@@ -218,6 +227,7 @@ function App() {
         ocrWords={ocrWords}
         markSize={markSize}
         ></ImageViewer>
+        <div className="loader" style={{display: loaderVisibility}}></div>
 
         <DragElementsArea dragElements={dragElements} setSelectedDragElement={(id) => {
           setSelectedDragElement(id)

@@ -51,8 +51,8 @@ def detect_rectangles():
         response.append({"x": x, "y": y, "width": w, "height": h})
         cv2.rectangle(image, (x, y), (x + w, y + h), (36,255,12), 3)
 
-    cv2.imshow('thresh', thresh)
-    cv2.imshow('opening', opening)
-    cv2.imshow('image', image)
-    #cv2.waitKey()
+    # cv2.imshow('thresh', thresh)
+    # cv2.imshow('opening', opening)
+    # cv2.imshow('image', image)
+    # cv2.waitKey()
     return jsonify(response)

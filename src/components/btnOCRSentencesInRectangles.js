@@ -4,7 +4,8 @@ import { createWorker } from 'tesseract.js';
 
 function OCRSentencesInRectangles(props) {
     
-    async function generateText() { 
+    async function generateText() {
+        props.showLoader()
         //Need to create a copy of the image from the props.bgImg URL as tesseract appears to delete or change it.
         let file = await fetch(props.bgImg).then(r => r.blob()).then(blobFile => new File([blobFile], "diagramFile", { type: "image/png" }))
 
@@ -70,8 +71,10 @@ function OCRSentencesInRectangles(props) {
                         let dropId = props.addDropArea(lineX, lineY, width, height, dropIdCounter)
                         props.addAnswerPair(dragId, dropId)
                     }
-
+                    if(i === content.length-1) props.hideLoader()
+                    
                   })
+                  
             }
         }
         imgSource.src = props.bgImg

@@ -7,7 +7,8 @@ function OCRDataTypes(props) {
     const fakeCanvasRef = useRef(null)
     const [fakeCanvasSize, setFakeCanvasSize] = useState([30, 15])
     
-    async function generateText() { 
+    async function generateText() {
+        props.showLoader()
         //Need to create a copy of the image from the props.bgImg URL as tesseract appears to delete or change it.
         let file = await fetch(props.bgImg).then(r => r.blob()).then(blobFile => new File([blobFile], "fileName", { type: "image/png" }))
 
@@ -69,7 +70,8 @@ function OCRDataTypes(props) {
                         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
                         ctx.drawImage(imgSource, words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight, 0, 0, wordWidth, wordHeight)
                         props.addOcrWord(fakeCanvasRef.current.toDataURL(), words[i].bbox.x0, words[i].bbox.y0, wordWidth, wordHeight)
-                    }      
+                    }
+                    if(i === words.length-1) props.hideLoader()     
                 }
             }
             imgSource.src = props.bgImg
