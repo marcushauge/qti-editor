@@ -55,13 +55,15 @@ function App() {
 
   function addDragElement(imgSrc, width, height, manualNewId) {
     let newId = 0
+    let newDataId = 0
     if(manualNewId === undefined) {
       newId = (dragElements[dragElements.length-1] === undefined) ? 1 : dragElements[dragElements.length-1].id+1
+      newDataId = (dragElements[dragElements.length-1] === undefined) ? 100000000 : dragElements[dragElements.length-1].dataId+1
     }
     else {
       newId = manualNewId
+      newDataId = 100000000+manualNewId
     }
-    let newDataId = (dragElements[dragElements.length-1] === undefined) ? 100000000 : dragElements[dragElements.length-1].dataId+1
     let newDragEl = {
       src: imgSrc,
       width: width,

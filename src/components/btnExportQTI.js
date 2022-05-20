@@ -181,10 +181,10 @@ function ExportQTI(props) {
                 let base64bgImg = bg.replace(/^data:image\/(png|jpg);base64,/, "") //Data url to base64
                 img.file(BGFILENAME, base64bgImg, {base64: true})
 
-                let boxImgFile = await fetch(aboxImg)
-                let boxImgUrl = await boxImgFile.url
-                let base64BoxImg = boxImgUrl.replace(/^data:image\/(png|jpg);base64,/, "")
-                img.file("ID_103871406.png", base64BoxImg, {base64: true})
+                // let boxImgFile = await fetch(aboxImg)
+                // let boxImgUrl = await boxImgFile.url
+                // let base64BoxImg = boxImgUrl.replace(/^data:image\/(png|jpg);base64,/, "")
+                // img.file("ID_103871406.png", base64BoxImg, {base64: true})
 
                 //Download
                 zip.generateAsync({type:"blob"}).then(function(content) {
